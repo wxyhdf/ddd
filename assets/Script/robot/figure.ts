@@ -47,6 +47,15 @@ export default class Figure extends cc.Component {
     }
 
     update() {
+        // if (this.start_Run) {
+        //     if (this.rigidbody.linearVelocity.y <= -640) {
+        //         this.rigidbody.linearDamping = 1;
+        //     } else {
+        //         //this.rigidbody.applyLinearImpulse(cc.v2(0, -640), this.rigidbody.getWorldCenter(), true);
+        //         this.rigidbody.linearDamping = 0;
+        //     }
+        // }
+
         if (this.start_Run) {
             this.rigidbody.linearVelocity = cc.v2(0, -540);
         }

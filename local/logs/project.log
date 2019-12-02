@@ -1,0 +1,148 @@
+2019-12-02T09:41:41.795Z - normal: Load ~/.CocosCreator/settings.json
+2019-12-02T09:41:42.898Z - normal: Initializing Asset Database
+2019-12-02T09:41:42.900Z - normal: checking language setting...
+2019-12-02T09:41:42.900Z - normal: Language: zh
+2019-12-02T09:41:43.363Z - success: preview server running at http://localhost:7456
+2019-12-02T09:41:43.365Z - success: protocol editor-framework registered
+2019-12-02T09:41:43.365Z - success: protocol app registered
+2019-12-02T09:41:43.365Z - success: protocol theme registered
+2019-12-02T09:41:43.365Z - success: protocol packages registered
+2019-12-02T09:41:43.366Z - success: protocol uuid registerred
+2019-12-02T09:41:43.366Z - success: protocol db registerred
+2019-12-02T09:41:43.366Z - success: protocol thumbnail registerred
+2019-12-02T09:41:43.366Z - success: protocol unpack registerred
+2019-12-02T09:41:43.366Z - success: protocol disable-commonjs registerred
+2019-12-02T09:41:43.631Z - normal: connected!
+2019-12-02T09:41:43.632Z - normal: Check project C:\Users\Administrator\Desktop\DDDProject
+2019-12-02T09:41:43.633Z - normal: Initializing project C:\Users\Administrator\Desktop\DDDProject
+2019-12-02T09:41:43.900Z - normal: Initializing Cocos2d
+2019-12-02T09:41:44.520Z - normal: Initializing engine extends
+2019-12-02T09:41:44.531Z - success: alipay-adapter loaded
+2019-12-02T09:41:44.534Z - success: asset-db-debugger loaded
+2019-12-02T09:41:44.535Z - success: baidu-adapter loaded
+2019-12-02T09:41:44.535Z - success: color-picker loaded
+2019-12-02T09:41:44.623Z - success: fb-audience-network loaded
+2019-12-02T09:41:44.658Z - success: fb-live-stream loaded
+2019-12-02T09:41:44.660Z - success: google-play-instant loaded
+2019-12-02T09:41:44.687Z - success: huawei-runtime loaded
+2019-12-02T09:41:44.820Z - success: cpk-publish loaded
+2019-12-02T09:41:44.821Z - success: jsb-adapter loaded
+2019-12-02T09:41:44.824Z - success: oppo-runtime loaded
+2019-12-02T09:41:44.826Z - success: package-manager loaded
+2019-12-02T09:41:44.908Z - success: qqplay-adapter loaded
+2019-12-02T09:41:44.909Z - success: runtime-dev-tools loaded
+2019-12-02T09:41:44.914Z - success: sdkbox loaded
+2019-12-02T09:41:44.915Z - success: tester loaded
+2019-12-02T09:41:44.916Z - success: ui-kit-preview-extra loaded
+2019-12-02T09:41:44.917Z - success: ui-kit-preview loaded
+2019-12-02T09:41:44.918Z - success: ui-kit loaded
+2019-12-02T09:41:44.922Z - success: vivo-runtime loaded
+2019-12-02T09:41:44.923Z - success: weapp-adapter loaded
+2019-12-02T09:41:44.923Z - success: xiaomi-adapter loaded
+2019-12-02T09:41:44.925Z - success: alipay-minigame loaded
+2019-12-02T09:41:44.960Z - success: assets loaded
+2019-12-02T09:41:44.961Z - success: builder loaded
+2019-12-02T09:41:45.142Z - success: cocos-services loaded
+2019-12-02T09:41:45.145Z - success: console loaded
+2019-12-02T09:41:45.171Z - success: fb-instant-games loaded
+2019-12-02T09:41:45.173Z - success: game-window loaded
+2019-12-02T09:41:45.173Z - success: google-instant-games loaded
+2019-12-02T09:41:45.176Z - success: hierarchy loaded
+2019-12-02T09:41:45.178Z - success: inspector loaded
+2019-12-02T09:41:45.178Z - success: keystore loaded
+2019-12-02T09:41:45.181Z - success: node-library loaded
+2019-12-02T09:41:45.181Z - success: package-asset loaded
+2019-12-02T09:41:45.182Z - success: preferences loaded
+2019-12-02T09:41:45.183Z - success: project-exporter loaded
+2019-12-02T09:41:45.184Z - success: project-importer loaded
+2019-12-02T09:41:45.185Z - success: project-settings loaded
+2019-12-02T09:41:45.188Z - success: scene loaded
+2019-12-02T09:41:45.188Z - success: simulator-debugger loaded
+2019-12-02T09:41:45.189Z - success: sprite-editor loaded
+2019-12-02T09:41:45.191Z - success: store loaded
+2019-12-02T09:41:45.194Z - success: timeline loaded
+2019-12-02T09:41:45.196Z - success: xiaomi-runtime loaded
+2019-12-02T09:41:45.981Z - normal: Loading packages
+2019-12-02T09:41:45.986Z - normal: Watching packages
+2019-12-02T09:41:46.253Z - normal: Run Application
+2019-12-02T09:41:47.480Z - info: Cocos Services load base data!
+2019-12-02T09:41:51.519Z - warn: Please specifiy a default value for "Lightning" property at its declaration:
+ 
+// Before:
+@property(...)
+value; 
+// After:
+@property(...)
+value = 0 energy
+2019-12-02T09:49:21.288Z - warn: Please specifiy a default value for "Lightning" property at its declaration:
+ 
+// Before:
+@property(...)
+value; 
+// After:
+@property(...)
+value = 0 energy
+2019-12-02T09:53:00.223Z - warn: Please specifiy a default value for "Lightning" property at its declaration:
+ 
+// Before:
+@property(...)
+value; 
+// After:
+@property(...)
+value = 0 energy
+2019-12-02T09:54:34.587Z - warn: Please specifiy a default value for "Lightning" property at its declaration:
+ 
+// Before:
+@property(...)
+value; 
+// After:
+@property(...)
+value = 0 energy
+2019-12-02T09:57:55.858Z - warn: Please specifiy a default value for "Lightning" property at its declaration:
+ 
+// Before:
+@property(...)
+value; 
+// After:
+@property(...)
+value = 0 energy
+2019-12-02T09:58:20.883Z - warn: Please specifiy a default value for "Lightning" property at its declaration:
+ 
+// Before:
+@property(...)
+value; 
+// After:
+@property(...)
+value = 0 energy
+2019-12-02T09:59:10.798Z - warn: Please specifiy a default value for "Lightning" property at its declaration:
+ 
+// Before:
+@property(...)
+value; 
+// After:
+@property(...)
+value = 0 energy
+2019-12-02T09:59:21.273Z - warn: Please specifiy a default value for "Lightning" property at its declaration:
+ 
+// Before:
+@property(...)
+value; 
+// After:
+@property(...)
+value = 0 energy
+2019-12-02T10:00:25.494Z - warn: Please specifiy a default value for "Lightning" property at its declaration:
+ 
+// Before:
+@property(...)
+value; 
+// After:
+@property(...)
+value = 0 energy
+2019-12-02T10:01:34.474Z - warn: Please specifiy a default value for "Lightning" property at its declaration:
+ 
+// Before:
+@property(...)
+value; 
+// After:
+@property(...)
+value = 0 energy

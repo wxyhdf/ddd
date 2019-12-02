@@ -644,11 +644,6 @@
     "meta": 1575270937408,
     "relativePath": "Script\\common\\config.ts"
   },
-  "1264c967-7c82-451e-8695-2a569a2e2235": {
-    "asset": 1575271830325,
-    "meta": 1575271833699,
-    "relativePath": "Script\\camera.ts"
-  },
   "dfca89c9-0b14-43be-ac39-d29d67fd2a89": {
     "asset": 1573607944799,
     "meta": 1575273443933,
@@ -664,14 +659,19 @@
     "meta": 1575276854621,
     "relativePath": "resources\\prefab\\bloodNode.prefab"
   },
-  "d1590f1d-0a4a-4d6a-ae1b-32808c6a54ea": {
-    "asset": 1575277443142,
-    "meta": 1575277539774,
-    "relativePath": "Script\\robot\\figure.ts"
+  "1264c967-7c82-451e-8695-2a569a2e2235": {
+    "asset": 1575280672557,
+    "meta": 1575280675360,
+    "relativePath": "Script\\camera.ts"
   },
   "65a1b77c-85de-4765-850f-53ee7ccc3664": {
-    "asset": 1575278272437,
-    "meta": 1575278274517,
+    "asset": 1575280892138,
+    "meta": 1575280893900,
     "relativePath": "Script\\gameScene.ts"
+  },
+  "d1590f1d-0a4a-4d6a-ae1b-32808c6a54ea": {
+    "asset": 1575280880459,
+    "meta": 1575280893900,
+    "relativePath": "Script\\robot\\figure.ts"
   }
 }

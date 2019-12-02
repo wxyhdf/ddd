@@ -38,9 +38,10 @@ export default class NewClass extends cc.Component {
             if (per >= visi.width / 2 - this.robot.width / 2) per = visi.width / 2 - this.robot.width / 2;
             if (per <= -visi.width / 2 + this.robot.width / 2) per = -visi.width / 2 + this.robot.width / 2;
             this.robot.setPosition(per, this.robot.y);
-            // let rigidbody = this.robot.getComponent(cc.RigidBody);
-            // rigidbody.linearVelocity = cc.v2(300, -640);
+            let rigidbody = this.robot.getComponent(cc.RigidBody);
+            //rigidbody.linearVelocity = cc.v2(300, -640);
             this.touch_Start_Point = pos;
+            //console.log(66);
         });
         this.node.on(cc.Node.EventType.TOUCH_CANCEL, (ev) => {
 

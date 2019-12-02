@@ -77,6 +77,7 @@ export default class GameScene extends cc.Component {
             rigidbody.applyLinearImpulse(cc.v2(0, 3000), rigidbody.getWorldCenter(), true);
             cc.tween(this.robot).to(0.5, { angle: -180 }).call(() => {
                 this.robot.getChildByName("info").active = true;
+                
                 this.robot.getChildByName("info").getChildByName("label").getComponent(cc.Label).string = GameHelper.GameInfo.blood.toString();
                 this.robot.getComponent("figure").startRun();
             }).start();
