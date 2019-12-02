@@ -3,5 +3,7 @@
 tsconfig.json
 jsconfig.json
 /packages/
-/lcoal/
+/local/
 *.d.ts
+local/layout.windows.json
+local/layout.windows.json

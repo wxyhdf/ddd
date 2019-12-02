@@ -35,8 +35,8 @@ export default class NewClass extends cc.Component {
             //this.robot_Pre_Point = this.node.convertToWorldSpaceAR(this.robot.position);
             let visi = cc.view.getVisibleSize();
 
-            if (per >= visi.width / 2 - this.robot.width / 2) per = visi.width / 2 - this.robot.width / 2;
-            if (per <= -visi.width / 2 + this.robot.width / 2) per = -visi.width / 2 + this.robot.width / 2;
+            if (per >= visi.width / 2 - this.robot.width ) per = visi.width / 2 - this.robot.width;
+            if (per <= -visi.width / 2 + this.robot.width ) per = -visi.width / 2 + this.robot.width;
             this.robot.setPosition(per, this.robot.y);
             let rigidbody = this.robot.getComponent(cc.RigidBody);
             //rigidbody.linearVelocity = cc.v2(300, -640);

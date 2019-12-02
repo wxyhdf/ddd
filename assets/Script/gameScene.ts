@@ -77,7 +77,7 @@ export default class GameScene extends cc.Component {
             rigidbody.applyLinearImpulse(cc.v2(0, 3000), rigidbody.getWorldCenter(), true);
             cc.tween(this.robot).to(0.5, { angle: -180 }).call(() => {
                 this.robot.getChildByName("info").active = true;
-                
+
                 this.robot.getChildByName("info").getChildByName("label").getComponent(cc.Label).string = GameHelper.GameInfo.blood.toString();
                 this.robot.getComponent("figure").startRun();
             }).start();
@@ -226,7 +226,7 @@ export default class GameScene extends cc.Component {
         this.createBlood();
         //最后一波不生成血量
         //if (this.blockCurrentId == this.blockConfig.length - 1) 
-
+        console.log(this.blockPool, this.bloodPool)
         this.blockCurrentId++;
         return true;
     }
@@ -240,7 +240,8 @@ export default class GameScene extends cc.Component {
             GameHelper.GameInfo.blood--;
             if (GameHelper.GameInfo.blood == 0) {
                 this.robot.removeFromParent();
-                alert("Game Over")
+                //alert("Game Over");
+                console.log("Game Over")
             }
             this.robot.getChildByName("info").getChildByName("label").getComponent(cc.Label).string = GameHelper.GameInfo.blood.toString();
             let label = node.getChildByName("label");
