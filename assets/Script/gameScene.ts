@@ -226,7 +226,7 @@ export default class GameScene extends cc.Component {
         this.createBlood();
         //最后一波不生成血量
         //if (this.blockCurrentId == this.blockConfig.length - 1) 
-        console.log(this.blockPool, this.bloodPool)
+        //console.log(this.blockPool, this.bloodPool)
         this.blockCurrentId++;
         return true;
     }
@@ -361,12 +361,19 @@ export default class GameScene extends cc.Component {
     update(dt) {
         this.moveBackground();
         this.isPreCreateBlock();
-        if (this.robot.y < this.draw_Start_PointY) {
-            this.draw.lineTo(this.robot.x, this.robot.y);
-            this.draw.lineWidth = 40;
-            this.draw.strokeColor = cc.Color.RED;
-            //this.draw.stroke();
-        }
+
     }
 
+    lateUpdate() {
+
+        if (this.robot.y < this.draw_Start_PointY) {
+            this.draw.lineTo(this.robot.x, this.robot.y);
+            this.draw.lineCap = cc.Graphics.LineCap.ROUND;
+            this.draw.lineWidth = this.robot.width;
+            this.draw.strokeColor = cc.Color.RED;
+            this.draw.stroke();
+            this.draw.close();
+            this.draw.moveTo(this.robot.x, this.robot.y);
+        }
+    }
 }

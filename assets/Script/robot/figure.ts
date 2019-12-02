@@ -14,8 +14,8 @@ export default class Figure extends cc.Component {
         this.start_Run = true;
     }
 
-    maxHitCount: number = 5;
-    hitcount: number = 5;
+    maxHitCount: number = 3;
+    hitcount: number = 3;
     // 每次处理完碰撞体接触逻辑时被调用
     onPostSolve(contact, selfCollider, otherCollider) {
         if (otherCollider.node.name == "block") {
@@ -43,7 +43,7 @@ export default class Figure extends cc.Component {
 
     }
     onEndContact(contact, selfCollider, otherCollider) {
-        this.hitcount = 5;
+        this.hitcount = 3;
     }
 
     update() {
@@ -57,7 +57,7 @@ export default class Figure extends cc.Component {
         // }
 
         if (this.start_Run) {
-            this.rigidbody.linearVelocity = cc.v2(0, -540);
+            this.rigidbody.linearVelocity = GameHelper.GameInfo.moveSpeed;
         }
     }
 

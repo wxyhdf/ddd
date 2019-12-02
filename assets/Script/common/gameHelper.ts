@@ -42,5 +42,7 @@ export namespace GameHelper {
          * 初始化血量
          */
         static blood: number = 10;
+
+        static moveSpeed: cc.Vec2 = cc.v2(0, -480);
     }
 }
