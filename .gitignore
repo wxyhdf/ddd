@@ -1,3 +1,7 @@
-!/assets
-!/settings
-!project.json
+/library/
+/temp/
+tsconfig.json
+jsconfig.json
+/packages/
+/lcoal/
+*.d.ts
