@@ -1,0 +1,28 @@
+{
+  "__type__": "cc.SpriteFrame",
+  "content": {
+    "name": "bozi",
+    "texture": "5895d87b-84b3-469b-9a99-31e2c416db7e",
+    "atlas": "",
+    "rect": [
+      42,
+      660,
+      175,
+      42
+    ],
+    "offset": [
+      -382.5,
+      -169
+    ],
+    "originalSize": [
+      1024,
+      1024
+    ],
+    "capInsets": [
+      0,
+      0,
+      0,
+      0
+    ]
+  }
+}

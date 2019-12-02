@@ -1,0 +1,28 @@
+{
+  "__type__": "cc.SpriteFrame",
+  "content": {
+    "name": "lian",
+    "texture": "c0df39fa-6bff-4433-8b83-1ad46d82d18b",
+    "atlas": "",
+    "rect": [
+      235,
+      528,
+      156,
+      72
+    ],
+    "offset": [
+      -199,
+      -52
+    ],
+    "originalSize": [
+      1024,
+      1024
+    ],
+    "capInsets": [
+      0,
+      0,
+      0,
+      0
+    ]
+  }
+}

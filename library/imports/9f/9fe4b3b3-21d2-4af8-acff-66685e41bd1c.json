@@ -1,0 +1,28 @@
+{
+  "__type__": "cc.SpriteFrame",
+  "content": {
+    "name": "zuiba",
+    "texture": "3fd8c1ef-a267-4248-9f3a-964e03e8d811",
+    "atlas": "",
+    "rect": [
+      597,
+      758,
+      33,
+      17
+    ],
+    "offset": [
+      101.5,
+      -254.5
+    ],
+    "originalSize": [
+      1024,
+      1024
+    ],
+    "capInsets": [
+      0,
+      0,
+      0,
+      0
+    ]
+  }
+}

@@ -1,0 +1,28 @@
+{
+  "__type__": "cc.SpriteFrame",
+  "content": {
+    "name": "shou",
+    "texture": "301949e4-83dc-44d7-9e2d-abdd65bdfa8d",
+    "atlas": "",
+    "rect": [
+      895,
+      678,
+      39,
+      35
+    ],
+    "offset": [
+      402.5,
+      -183.5
+    ],
+    "originalSize": [
+      1024,
+      1024
+    ],
+    "capInsets": [
+      0,
+      0,
+      0,
+      0
+    ]
+  }
+}
