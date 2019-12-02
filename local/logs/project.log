@@ -146,3 +146,11 @@ value;
 // After:
 @property(...)
 value = 0 energy
+2019-12-02T10:07:12.270Z - warn: Please specifiy a default value for "Lightning" property at its declaration:
+ 
+// Before:
+@property(...)
+value; 
+// After:
+@property(...)
+value = 0 energy

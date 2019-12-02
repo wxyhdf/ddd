@@ -364,7 +364,7 @@ export default class GameScene extends cc.Component {
             this.draw.lineTo(this.robot.x, this.robot.y);
             this.draw.lineWidth = 40;
             this.draw.strokeColor = cc.Color.RED;
-            this.draw.stroke();
+            //this.draw.stroke();
         }
     }
 
