@@ -10,6 +10,8 @@ import {
 import config from './common/config';
 import { Units } from './common/units';
 import { AssetLoader } from './common/assetLoader';
+import Camera from './camera';
+import Config from './common/config';
 @ccclass
 export default class GameScene extends cc.Component {
 
@@ -28,6 +30,11 @@ export default class GameScene extends cc.Component {
      */
     @property(cc.Node)
     camera: cc.Node = null;
+     /**
+     * 右上角分数值
+     */
+    @property(cc.Node)
+    right_topStr: cc.Node = null;
     /**
     * 小方块的颜色
     */
@@ -58,17 +65,94 @@ export default class GameScene extends cc.Component {
      */
     @property(cc.Graphics)
     draw: cc.Graphics = null;
+        /**
+     * 开始文字的闪烁
+     */
+    @property(cc.Sprite)
+    topstartStr:cc.Sprite = null;
+
+    /**
+     * 初始化右上角的分数
+     */
+    rightScore = 0;
+    /**
+     * 结算节点
+     */
+    @property(cc.Sprite)
+    scoreboard:cc.Sprite = null;
+    /**
+     * 结算的分数
+     */
+    @property(cc.Label)
+    score_str:cc.Label = null;
+    /**
+     * 历史最高分数
+     */
+    @property(cc.Label)
+    histroy_MaxScore:cc.Label = null;
+    /**
+     * 结束的闪烁文字
+     */
+    @property(cc.Sprite)
+    topTocontinue:cc.Sprite = null;
+    /**
+     * 蓝色进度条
+     */
+    @property(cc.Sprite)
+    progressBlue:cc.Sprite = null;
+    /**
+     * 初始化进度条的长度
+     */
+    @property(cc.Sprite)
+    progressInit:cc.Sprite = null;
+    /**
+     * 进度条结束
+     */
+    @property(cc.Sprite)
+    progressEnd:cc.Sprite = null;
+    /**
+     * 进度条的父节点
+     */
+    @property(cc.Node)
+    progress:cc.Node = null;
+    /**
+     * 重来一局的按钮
+     */
+    @property(cc.Button)
+    endBtn:cc.Button = null;
+    /**
+     * 选择关卡，人物的父节点
+     */
+    @property(cc.Node)
+    select:cc.Node = null;
+    /**
+     * 关卡的父节点
+     */
+    @property(cc.Sprite)
+    pass_bg:cc.Sprite = null;
+
 
     @property(cc.Prefab)
     railing: cc.Prefab = null;
 
     start_touch_one: boolean = false;
+    
 
     /**
      * 触发开始Game
      */
     OnGameStart(e) {
-        if (!this.start_touch_one) {
+
+        if (!this.start_touch_one && GameHelper.GameInfo.gameFlag) {
+
+            this.init();
+
+            this.topstartStr.node.active = false;
+            this.select.active = false;
+            this.scheduleOnce(function(){
+                this.progress.active = true;
+            }.bind(this), 2)
+            
             this.start_touch_one = true;
             //设置重力加速度
             //cc.director.getPhysicsManager().gravity = cc.v2(0, -640);
@@ -234,15 +318,15 @@ export default class GameScene extends cc.Component {
 
 
     init() {
-        this.node.on(cc.Node.EventType.TOUCH_START, this.OnGameStart, this);
+       
+       //使用第一关的关卡配置;
+       this.createConfigCoordinate(GameHelper.GameInfo.pass);
+       //首先生成一次方块
+       this.createBlock();
         this.node.on(GameHelper.NodeEvent.HitBlock, (ev: cc.Event.EventCustom) => {
             let node = ev.getUserData()["target"] as cc.Node;
             GameHelper.GameInfo.blood--;
-            if (GameHelper.GameInfo.blood == 0) {
-                this.robot.removeFromParent();
-                //alert("Game Over");
-                console.log("Game Over")
-            }
+            
             this.robot.getChildByName("info").getChildByName("label").getComponent(cc.Label).string = GameHelper.GameInfo.blood.toString();
             let label = node.getChildByName("label");
             let blood = Number(label.getComponent(cc.Label).string) - 1;
@@ -250,6 +334,21 @@ export default class GameScene extends cc.Component {
                 this.blockPool.onKilled(node);
             }
             label.getComponent(cc.Label).string = blood.toString();
+            this.rightScore ++;
+            this.right_topStr.getComponent(cc.Label).string = this.rightScore.toString();
+            this.progressFunc(this.rightScore);
+            //第一关分数变为 50 分就通关
+            if(this.rightScore === 50){
+                this.robot.removeFromParent();
+                console.log("Game Over")
+                this.alertAccountsFunc(this.rightScore, 100);
+                this.progressEnd.node.color = cc.color(65, 158, 219);
+            }
+            if (GameHelper.GameInfo.blood == 0) { //机器人能量变为0时，弹出结束页面
+                this.robot.removeFromParent();
+                console.log("Game Over")
+                this.alertAccountsFunc(this.rightScore, 100);
+            }
         })
         this.node.on(GameHelper.NodeEvent.AddBlood, (ev: cc.Event.EventCustom) => {
             let node = ev.getUserData()["target"] as cc.Node;
@@ -261,6 +360,7 @@ export default class GameScene extends cc.Component {
             //更新血量
             this.robot.getChildByName("info").getChildByName("label").getComponent(cc.Label).string = GameHelper.GameInfo.blood.toString();
         })
+        GameHelper.GameInfo.blood = 10;
     }
     /**
      * 画笔开始画画的起点
@@ -279,13 +379,14 @@ export default class GameScene extends cc.Component {
         //设置画笔起始y轴坐标
         this.draw_Start_PointY = this.robot.y - this.robot.height / 2;
         this.draw.moveTo(0, this.robot.y - this.robot.height / 2);
-        //使用第一关的关卡配置;
-        this.createConfigCoordinate(config.pass_1);
-        //首先生成一次方块
-        this.createBlock();
+        
+        this.node.on(cc.Node.EventType.TOUCH_START, this.OnGameStart, this);
 
         //this.spawnNewPlayer();
-        this.init();
+        //this.init();
+        this.topstartStrFunc();
+
+        
     }
     /**
     * 判断节点是否可见
@@ -351,8 +452,43 @@ export default class GameScene extends cc.Component {
         }
 
     }
+    /**
+     * 进度条改变函数
+     */
+    progressFunc(value:number){
+        this.progressBlue.node.width = value/50 * this.progressInit.node.width;
+    }
+    /**
+     * 开始文字闪烁函数
+     */
+    topstartStrFunc(){
+        this.topstartStr.node.active = true;
+        var act1 = cc.fadeTo(1, 50);
+        var act2 = cc.fadeTo(1, 255);
+        var seq = cc.repeatForever(cc.sequence(act1, act2));
+        this.topstartStr.node.runAction(seq);
+    }
+    /**
+     * 弹出结算框
+     */
+    alertAccountsFunc(current_score:number, MaxScore:number){
+        this.endBtn.node.active = true;
+        this.scoreboard.node.active = true;
+        this.topTocontinue.node.active = true;
+        this.score_str.string = current_score.toString();
+        this.histroy_MaxScore.string = MaxScore.toString();
+        var act1 = cc.fadeTo(1, 50);
+        var act2 = cc.fadeTo(1, 255);
+        var seq = cc.repeatForever(cc.sequence(act1, act2));
+        this.topTocontinue.node.runAction(seq);
+    }
+    /**
+     * 重新加载场景，再来一局
+     */
 
-
+    endBtnOnclickFunc(){
+        cc.director.loadScene("Muen");
+    }
 
     start() {
 

@@ -1,3 +1,5 @@
+import Config from "./config";
+
 export namespace GameHelper {
     /**
      * 节点事件
@@ -44,5 +46,9 @@ export namespace GameHelper {
         static blood: number = 10;
 
         static moveSpeed: cc.Vec2 = cc.v2(0, -480);
+
+        static pass = Config.pass_1;
+
+        static gameFlag:boolean=true;
     }
 }

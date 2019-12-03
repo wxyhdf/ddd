@@ -13,7 +13,7 @@ import { GameHelper } from "./common/gameHelper";
 const { ccclass, property } = cc._decorator;
 
 @ccclass
-export default class NewClass extends cc.Component {
+export default class Camera extends cc.Component {
 
     @property(cc.Node)
     robot: cc.Node = null;
@@ -27,6 +27,42 @@ export default class NewClass extends cc.Component {
     * 屏幕监听开始点
     */
     start_Lisence_PointY: number = 0;
+    /**
+     * 右上角的能量值
+     */
+    @property(cc.Label)
+    rightTop_str:cc.Label = null;
+    /**
+     * 结算框
+     */
+    @property(cc.Sprite)
+    scoreboard:cc.Sprite = null;
+    /**
+     * Top To Continue
+     */
+    @property(cc.Sprite)
+    topTocontinue:cc.Sprite = null;
+    /**
+     * 进度条
+     */
+    @property(cc.Node)
+    progress:cc.Node = null;
+    /**
+     * 结束按钮：重来
+     */
+    @property(cc.Button)
+    endBtn:cc.Button = null;
+    /**
+     * 关卡背景
+     */
+    @property(cc.Sprite)
+    pass_bg:cc.Sprite = null;
+    /**
+     * select节点：选择人物，关卡的父节点
+     */
+    @property(cc.Node)
+    select:cc.Node = null;
+    
 
     //屏幕点击起始点
     touch_Start_Point: cc.Vec2 = cc.v2(0, 0);
@@ -86,7 +122,9 @@ export default class NewClass extends cc.Component {
         }
         return true;
     }
+ 
     start() {
+  
         this.start_Lisence_PointY = this.robot.y - this.robot.height / 2;
         //this.init();
     }
@@ -95,16 +133,44 @@ export default class NewClass extends cc.Component {
      */
     flag: boolean = false;
     lateUpdate() {
-        if (this.robot.y > this.node.y) {
+        if (this.robot.y > this.node.y && GameHelper.GameInfo.gameFlag) {
             this.flag = true;
             //this.node.setPosition(0, this.robot.y);
         }
         if (this.robot.y < this.node.y && this.flag) {
             this.node.setPosition(0, this.robot.y);
+            this.rightTop_str.node.active = true;
+            this.rightTop_str.node.position = cc.v2(250, this.robot.y + 400);
+            this.scoreboard.node.setPosition(0, this.robot.y);
+            this.topTocontinue.node.setPosition(0,this.robot.y - 300);
+            this.progress.setPosition(0, this.robot.y + 400);
+            this.endBtn.node.setPosition(0,this.robot.y);
+
         }
         if (this.robot.y <= this.start_Lisence_PointY) {
             this.init();
         }
+    }
+
+    /**
+     * 相机上移
+     */
+    upCameraFunc(){
+       
+        cc.tween(this.node).to(1,{position:cc.v2(0,0)}).call(()=>{
+            GameHelper.GameInfo.gameFlag=true;
+            this.pass_bg.node.active = false;
+            this.select.active = true;
+        }).start();
+    }
+     /**
+     * 相机下移
+     */
+    downCameraFunc(){
+        GameHelper.GameInfo.gameFlag=false;
+        cc.tween(this.node).to(1,{position:cc.v2(0,-500)}).call(()=>{
+            
+        }).start();
     }
 
     // update (dt) {}
