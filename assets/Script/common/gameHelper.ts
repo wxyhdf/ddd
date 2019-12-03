@@ -29,6 +29,10 @@ export namespace GameHelper {
          * 加血事件
          */
         AddBlood = "AddBlood",
+          /**
+         * 更新关卡
+         */
+        UpdatePassInfo = "UpdatePassInfo",
     }
     /**
      * 节点可视方向

@@ -1,3 +1,5 @@
+import Config from "./common/config";
+import { GameHelper } from "./common/gameHelper";
 
 const {ccclass, property} = cc._decorator;
 
@@ -30,11 +32,7 @@ export default class NewClass extends cc.Component {
      */
     @property(cc.Node)
     select:cc.Node = null;
-    /**
-     * 关卡退出
-     */
-    @property(cc.Sprite)
-    pass_exitBtn:cc.Sprite= null;
+    
 
     // onLoad () {}
 
@@ -42,7 +40,7 @@ export default class NewClass extends cc.Component {
 
     }
     passYellowFunc(){ 
-        this.pass_exitBtn.node.active = true;
+
         this.pass_bg.node.active = true;
         this.select.active = false;
         for(let i = 0 ; i < 9; i++){
@@ -59,14 +57,16 @@ export default class NewClass extends cc.Component {
             }  
             if(i >= 6){
                 pass_btn.setPosition( i*200 - 1400, 10);
-            }   
-        }
-        
+            }
+            pass_btn.on(cc.Node.EventType.TOUCH_START,(ev)=>{
+                //console.log(Config.pass_info[ev.target.getSiblingIndex()]);
+                let event=new cc.Event.EventCustom(GameHelper.NodeEvent.UpdatePassInfo,true);
+                event.setUserData({data:Config.pass_info[ev.target.getSiblingIndex()]})
+                pass_btn.dispatchEvent(event);
+            })   
+        }  
     }
-    passExitBtnFunc(){
-        this.pass_exitBtn.node.active = false;
-        // this.pass_bg.node.active = false;
-    }
+
 
     // update (dt) {}
 }

@@ -62,6 +62,11 @@ export default class Camera extends cc.Component {
      */
     @property(cc.Node)
     select:cc.Node = null;
+    /**
+     * 关卡退出
+     */
+    @property(cc.Sprite)
+    pass_exitBtn:cc.Sprite= null;
     
 
     //屏幕点击起始点
@@ -124,7 +129,7 @@ export default class Camera extends cc.Component {
     }
  
     start() {
-  
+      
         this.start_Lisence_PointY = this.robot.y - this.robot.height / 2;
         //this.init();
     }
@@ -156,11 +161,12 @@ export default class Camera extends cc.Component {
      * 相机上移
      */
     upCameraFunc(){
-       
+        this.pass_exitBtn.node.active = false;
         cc.tween(this.node).to(1,{position:cc.v2(0,0)}).call(()=>{
             GameHelper.GameInfo.gameFlag=true;
             this.pass_bg.node.active = false;
             this.select.active = true;
+            
         }).start();
     }
      /**
@@ -169,7 +175,7 @@ export default class Camera extends cc.Component {
     downCameraFunc(){
         GameHelper.GameInfo.gameFlag=false;
         cc.tween(this.node).to(1,{position:cc.v2(0,-500)}).call(()=>{
-            
+            this.pass_exitBtn.node.active = true;
         }).start();
     }
 
