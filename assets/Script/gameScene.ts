@@ -142,6 +142,11 @@ export default class GameScene extends cc.Component {
      */
     @property(cc.Label)
     demand: cc.Label = null;
+    /**
+     * 预制体:机器人能量减少
+     */
+    @property(cc.Prefab)
+    reduce:cc.Prefab = null;
 
 
     @property(cc.Prefab)
@@ -348,36 +353,19 @@ export default class GameScene extends cc.Component {
             label.getComponent(cc.Label).string = blood.toString();
             this.rightScore++;
             this.right_topStr.getComponent(cc.Label).string = this.rightScore.toString();
-            this.progressFunc(this.rightScore);
 
-            // //通关条件
-            // switch (this.pass_label) {
-            //     case "Challenge 01":
-            //         if(this.rightScore >= 50){
-            //             this.robot.removeFromParent();
-            //             console.log("Game Over")
-            //             this.alertAccountsFunc(this.rightScore, 100);
-            //             this.progressEnd.node.color = cc.color(65, 158, 219);
-            //         }
-            //         break;
-            //     case "Challenge 02":
-            //         if(GameHelper.GameInfo.blood >= 30){
-            //             this.robot.removeFromParent();
-            //             cc.log(GameHelper.GameInfo.blood);
-            //             this.alertAccountsFunc(this.rightScore, 100);
-            //             this.progressEnd.node.color = cc.color(65, 158, 219);
-            //         }
-            //     break;
-
-            //     default:
-            //         break;
-            // }
-
-            // if (GameHelper.GameInfo.blood == 0) { //机器人能量变为0时，弹出结束页面
-            //     this.robot.removeFromParent();
-            //     console.log("Game Over")
-            //     this.alertAccountsFunc(this.rightScore, 100);
-            // }
+            if (GameHelper.GameInfo.blood == 0) { //机器人能量变为0时，弹出结束页面
+                this.robot.removeFromParent();
+                console.log("Game Over")
+                this.alertAccountsFunc(this.rightScore, 100);
+            }
+            //减少血量的动画
+            var reduce = cc.instantiate(this.reduce);
+            reduce.parent = this.robot;
+            cc.log(reduce);
+            reduce.setPosition(this.robot.x, this.robot.y + 500);
+            var action = cc.moveBy(2, cc.v2(this.robot.x - 100, this.robot.y -  200));
+            reduce.runAction(action);
         })
         this.node.on(GameHelper.NodeEvent.AddBlood, (ev: cc.Event.EventCustom) => {
             let node = ev.getUserData()["target"] as cc.Node;
@@ -484,9 +472,9 @@ export default class GameScene extends cc.Component {
     /**
      * 进度条改变函数
      */
-    progressFunc(value: number) {
-        this.progressBlue.node.width = value / 50 * this.progressInit.node.width;
-    }
+    // progressFunc(value: number) {
+    //     this.progressBlue.node.width = value / 50 * this.progressInit.node.width;
+    // }
     /**
      * 开始文字闪烁函数
      */
@@ -516,6 +504,7 @@ export default class GameScene extends cc.Component {
      */
 
     endBtnOnclickFunc() {
+
         cc.director.loadScene("Muen");
     }
     /**
@@ -531,7 +520,7 @@ export default class GameScene extends cc.Component {
     /**
      * 确认选了这一关得Label
      */
-    pass_label = "";
+    pass_label = "Challenge 01";
     /**
      * 确认选关
      */
@@ -557,34 +546,32 @@ export default class GameScene extends cc.Component {
     checkGameStatus() {
         switch (this.pass_label) {
             case "Challenge 01":
-                if (this.rightScore >= 50) {
+                if (this.rightScore === 50) {
                     this.robot.removeFromParent();
                     console.log("Game Over")
                     this.alertAccountsFunc(this.rightScore, 100);
                     this.progressEnd.node.color = cc.color(65, 158, 219);
                     this.gameRunning = false;
                 }
+                this.progressBlue.node.width =  this.rightScore / 50 * this.progressInit.node.width;
                 break;
             case "Challenge 02":
-                if (GameHelper.GameInfo.blood >= 30) {
+                if (GameHelper.GameInfo.blood >= 40) {
                     this.robot.removeFromParent();
                     cc.log(GameHelper.GameInfo.blood);
                     this.alertAccountsFunc(this.rightScore, 100);
                     this.progressEnd.node.color = cc.color(65, 158, 219);
                     this.gameRunning = false;
-
                 }
+                this.progressBlue.node.width =  (GameHelper.GameInfo.blood -10) / 30 * this.progressInit.node.width;
+
                 break;
 
             default:
                 break;
         }
 
-        if (GameHelper.GameInfo.blood == 0) { //机器人能量变为0时，弹出结束页面
-            this.robot.removeFromParent();
-            console.log("Game Over")
-            this.alertAccountsFunc(this.rightScore, 100);
-        }
+
     }
     update(dt) {
         this.moveBackground();
