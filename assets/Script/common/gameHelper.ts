@@ -54,5 +54,21 @@ export namespace GameHelper {
         static pass = Config.pass_1;
 
         static gameFlag:boolean=true;
+        /**
+         * 初始化最初的方块值：保全局
+         */
+        static block_value = 0;
+        /**
+         * level：初始化关卡left
+         */
+        static level_left = 1;
+        /**
+         * level：初始化关卡right
+         */
+        static level_right = 2;
+        /**
+         * 历史最高
+         */
+        static historyMaxScore = 0;
     }
 }

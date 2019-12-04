@@ -1,9 +1,10 @@
 /library/
 /temp/
+/build/
 tsconfig.json
 jsconfig.json
 /packages/
-/local/
+/local/*
 *.d.ts
 local/layout.windows.json
 local/layout.windows.json

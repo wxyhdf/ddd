@@ -13,6 +13,7 @@ import { AssetLoader } from './common/assetLoader';
 import Camera from './camera';
 import Config from './common/config';
 import PassInfo from './common/config';
+
 @ccclass
 export default class GameScene extends cc.Component {
 
@@ -146,14 +147,28 @@ export default class GameScene extends cc.Component {
      * 预制体:机器人能量减少
      */
     @property(cc.Prefab)
-    reduce:cc.Prefab = null;
+    reduce: cc.Prefab = null;
+    /**
+     * 现在处于的关卡label
+     */
+    @property(cc.Label)
+    level: cc.Label = null;
 
 
     @property(cc.Prefab)
     railing: cc.Prefab = null;
 
     start_touch_one: boolean = false;
-
+    /**
+     * 左边进度条的关数名
+     */
+    @property(cc.Label)
+    level_leftProgress: cc.Label = null;
+    /**
+   * 右边进度条的关数名
+   */
+    @property(cc.Label)
+    level_rightProgress: cc.Label = null;
 
     /**
      * 触发开始Game
@@ -166,11 +181,24 @@ export default class GameScene extends cc.Component {
 
             this.topstartStr.node.active = false;
             this.select.active = false;
-            this.scheduleOnce(function () {
-                this.progress.active = true;
-            }.bind(this), 2)
-
             this.start_touch_one = true;
+            switch (this.pass_label) {
+                case "Challenge 01":
+                    this.scheduleOnce(function () {
+                        this.condition.active = true;
+                    }.bind(this), 2)
+                    break;
+
+                case "":
+                    this.scheduleOnce(function () {
+                        this.right_topStr.active = true;
+                        this.progress.active = true;
+                        this.level_leftProgress.string = GameHelper.GameInfo.level_left;
+                        this.level_rightProgress.string = GameHelper.GameInfo.level_right;
+                    }.bind(this), 2)
+                    break;
+            }
+
             //设置重力加速度
             //cc.director.getPhysicsManager().gravity = cc.v2(0, -640);
             let rigidbody = this.robot.getComponent(cc.RigidBody);
@@ -322,6 +350,16 @@ export default class GameScene extends cc.Component {
                 node.setPosition(this.blockNode.convertToNodeSpaceAR(item));
                 this.blockArray.add(node);
                 this.blockNode.addChild(node);
+                let sprite = node.getChildByName("sprite");
+                if (parseInt(label.getComponent(cc.Label).string) >= 10 && parseInt(label.getComponent(cc.Label).string) <= 18) {
+                    sprite.color = cc.color(228, 139, 69);
+                }
+                else if (parseInt(label.getComponent(cc.Label).string) > 18) {
+                    sprite.color = cc.color(248, 95, 9);
+                } else {
+                    sprite.color = cc.color(224, 230, 93);
+                }
+
             })
         }
         this.createBlood();
@@ -332,9 +370,16 @@ export default class GameScene extends cc.Component {
         return true;
     }
 
-
+    /**
+     * 关卡方块值
+     */
+    rightTop_diaStr = 0;
 
     init() {
+        // 这个判断为再来一局打到能量为0时，初始化10能量
+        if (GameHelper.GameInfo.blood === 0) {
+            GameHelper.GameInfo.blood = 10;
+        }
 
         //使用第一关的关卡配置;
         this.createConfigCoordinate(GameHelper.GameInfo.pass);
@@ -342,30 +387,32 @@ export default class GameScene extends cc.Component {
         this.createBlock();
         this.node.on(GameHelper.NodeEvent.HitBlock, (ev: cc.Event.EventCustom) => {
             let node = ev.getUserData()["target"] as cc.Node;
-            GameHelper.GameInfo.blood--;
-
             this.robot.getChildByName("info").getChildByName("label").getComponent(cc.Label).string = GameHelper.GameInfo.blood.toString();
+            GameHelper.GameInfo.blood--;
             let label = node.getChildByName("label");
             let blood = Number(label.getComponent(cc.Label).string) - 1;
             if (blood == 0) {
                 this.blockPool.onKilled(node);
             }
             label.getComponent(cc.Label).string = blood.toString();
-            this.rightScore++;
-            this.right_topStr.getComponent(cc.Label).string = this.rightScore.toString();
+            GameHelper.GameInfo.block_value++;
+            this.rightTop_diaStr++;
+            GameHelper.GameInfo.historyMaxScore = Math.max(this.rightTop_diaStr, GameHelper.GameInfo.historyMaxScore);
+
+            this.right_topStr.getComponent(cc.Label).string = GameHelper.GameInfo.block_value.toString();
 
             if (GameHelper.GameInfo.blood == 0) { //机器人能量变为0时，弹出结束页面
                 this.robot.removeFromParent();
-                console.log("Game Over")
-                this.alertAccountsFunc(this.rightScore, 100);
+                console.log("Game Over");
+                this.alertAccountsFunc(this.rightTop_diaStr, GameHelper.GameInfo.historyMaxScore);
             }
-            //减少血量的动画
-            var reduce = cc.instantiate(this.reduce);
-            reduce.parent = this.robot;
-            cc.log(reduce);
-            reduce.setPosition(this.robot.x, this.robot.y + 500);
-            var action = cc.moveBy(2, cc.v2(this.robot.x - 100, this.robot.y -  200));
-            reduce.runAction(action);
+            let sprite = node.getChildByName("sprite");
+            let color = sprite.color;
+            color.setB(color.getB() - 10);
+            color.setG(color.getG() + 10);
+            sprite.color = color;
+
+
         })
         this.node.on(GameHelper.NodeEvent.AddBlood, (ev: cc.Event.EventCustom) => {
             let node = ev.getUserData()["target"] as cc.Node;
@@ -377,20 +424,20 @@ export default class GameScene extends cc.Component {
             //更新血量
             this.robot.getChildByName("info").getChildByName("label").getComponent(cc.Label).string = GameHelper.GameInfo.blood.toString();
         })
-        GameHelper.GameInfo.blood = 10;
+        // GameHelper.GameInfo.blood = 10;
     }
     /**
      * 画笔开始画画的起点
      */
     draw_Start_PointY: number = 0;
 
+
     onLoad() {
         //开启物理系统
         cc.director.getPhysicsManager().enabled = true;
         //设置重力加速度
         cc.director.getPhysicsManager().gravity = cc.v2(0, 0);
-        //cc.director.getPhysicsManager().debugDrawFlags = cc.PhysicsManager.DrawBits.e_aabbBit | cc.PhysicsManager.DrawBits.e_jointBit | cc.PhysicsManager.DrawBits.e_shapeBit;
-
+        cc.log(GameHelper.GameInfo.moveSpeed)
         //生成背景节点
         this.createBackground();
         //设置画笔起始y轴坐标
@@ -399,10 +446,8 @@ export default class GameScene extends cc.Component {
 
         this.node.on(cc.Node.EventType.TOUCH_START, this.OnGameStart, this);
 
-        //this.spawnNewPlayer();
-        //this.init();
         this.topstartStrFunc();
-
+        this.right_topStr.getComponent(cc.Label).string = GameHelper.GameInfo.block_value.toString();
 
     }
     /**
@@ -470,12 +515,6 @@ export default class GameScene extends cc.Component {
 
     }
     /**
-     * 进度条改变函数
-     */
-    // progressFunc(value: number) {
-    //     this.progressBlue.node.width = value / 50 * this.progressInit.node.width;
-    // }
-    /**
      * 开始文字闪烁函数
      */
     topstartStrFunc() {
@@ -486,7 +525,9 @@ export default class GameScene extends cc.Component {
         this.topstartStr.node.runAction(seq);
     }
     /**
-     * 弹出结算框
+     *  弹出结算框
+     * @param current_score  当前局的结算获得的方块值
+     * @param MaxScore  历史最高分数
      */
     alertAccountsFunc(current_score: number, MaxScore: number) {
         this.endBtn.node.active = true;
@@ -504,6 +545,7 @@ export default class GameScene extends cc.Component {
      */
 
     endBtnOnclickFunc() {
+        GameHelper.GameInfo.moveSpeed = cc.v2(0, -480);
 
         cc.director.loadScene("Muen");
     }
@@ -520,7 +562,11 @@ export default class GameScene extends cc.Component {
     /**
      * 确认选了这一关得Label
      */
-    pass_label = "Challenge 01";
+    pass_label = "";
+    /**
+     * 确认选了这一关的条件
+     */
+    condition_str = "";
     /**
      * 确认选关
      */
@@ -529,70 +575,121 @@ export default class GameScene extends cc.Component {
         this.alert.active = false;
         this.pass_label = this.challenge.string;
         cc.log(this.pass_label);
+        this.level.string = this.challenge.string.substring(10, 12);
     }
-
+    /**
+     * 通关过程钟中标签的显示
+     */
+    @property(cc.Label)
+    condition_label: cc.Label = null;
+    @property(cc.Node)
+    condition: cc.Node = null;
     start() {
         this.node.on(GameHelper.NodeEvent.UpdatePassInfo, (ev: cc.Event.EventCustom) => {
             let data = ev.getUserData()["data"] as PassInfo;
-            cc.log(data);
             this.alert.active = true;
             this.alert.setPosition(this.camera.position);
             this.challenge.string = data.challenge;
             this.demand.string = data.demand;
             this.all_selectPass = data.pass;
+            this.condition_str = data.condition;
         })
     }
     gameRunning = true;
     checkGameStatus() {
         switch (this.pass_label) {
             case "Challenge 01":
-                if (this.rightScore === 50) {
+                this.condition_label.string = this.rightTop_diaStr + this.condition_str;
+                if (this.rightTop_diaStr === 50) {
                     this.robot.removeFromParent();
-                    console.log("Game Over")
-                    this.alertAccountsFunc(this.rightScore, 100);
-                    this.progressEnd.node.color = cc.color(65, 158, 219);
                     this.gameRunning = false;
+                    setTimeout(() => {
+                        cc.director.loadScene("Muen");
+                    }, 500)
+
                 }
-                this.progressBlue.node.width =  this.rightScore / 50 * this.progressInit.node.width;
                 break;
             case "Challenge 02":
                 if (GameHelper.GameInfo.blood >= 40) {
                     this.robot.removeFromParent();
-                    cc.log(GameHelper.GameInfo.blood);
-                    this.alertAccountsFunc(this.rightScore, 100);
-                    this.progressEnd.node.color = cc.color(65, 158, 219);
                     this.gameRunning = false;
+                    setTimeout(() => {
+                        cc.director.loadScene("Muen");
+                    }, 500);
                 }
-                this.progressBlue.node.width =  (GameHelper.GameInfo.blood -10) / 30 * this.progressInit.node.width;
-
                 break;
 
             default:
                 break;
         }
-
-
     }
     update(dt) {
         this.moveBackground();
         this.isPreCreateBlock();  //通关条件
         if (this.gameRunning) {
             this.checkGameStatus();
-
         }
-
     }
-
+    /**
+     * 金币
+     */
+    gold = 0;
+    animationFlag: boolean = false;
+    /**
+     * 最后结束的时候的背景图
+     */
+    @property(cc.Sprite)
+    end_bg: cc.Sprite = null;
+    /**
+     * 是否游戏结束
+     */
+    gameEnd = true;
+    /**
+     * 游戏是否再来一次，为了恢复原来的robot的移动
+     */
+    game_again = true;
     lateUpdate() {
 
+        if (!this.animationFlag && this.robot.y < this.draw_Start_PointY) {
+            this.animationFlag = true;
+            this.robot.getChildByName("2").getComponent(cc.Animation).play();
+        }
         if (this.robot.y < this.draw_Start_PointY) {
             this.draw.lineTo(this.robot.x, this.robot.y);
             this.draw.lineCap = cc.Graphics.LineCap.ROUND;
-            this.draw.lineWidth = this.robot.width;
-            this.draw.strokeColor = cc.Color.RED;
+            this.draw.lineWidth = this.robot.width - 10;
+            this.draw.strokeColor = cc.color(28, 8, 8);
             this.draw.stroke();
             this.draw.close();
             this.draw.moveTo(this.robot.x, this.robot.y);
+            //进度条过程
+            this.progressBlue.node.width = Math.abs(this.robot.y) / Math.abs(this.blockConfig[this.blockConfig.length - 1][0].y - 700) * this.progressInit.node.width;
+            if (this.robot.y <= (this.blockConfig[this.blockConfig.length - 1][0].y - 700) && this.gameEnd) {
+                //小于方块的最后一组的Y坐标并且游戏结束
+                this.progressEnd.node.color = cc.color(65, 158, 219);
+                this.robot.y = this.blockConfig[this.blockConfig.length - 1][0].y - 700;
+                this.robot.x = 0;
+                this.end_bg.node.active = true;
+                this.camera.getComponent("camera").flag = false;
+                this.scheduleOnce(function () {
+                    this.camera.getComponent(cc.Camera).zoomRatio = 1.5;
+                    this.gold++;
+                    GameHelper.GameInfo.level_left++;
+                    GameHelper.GameInfo.level_right++;
+                    cc.log(this.gold);
+                    this.robot.angle = 0
+                    this.robot.getChildByName("info").active = false;
+                    this.robot.getChildByName("2").getComponent(cc.Animation).stop();
+                    this.endBtn.node.active = true;
+                }.bind(this), 2);
+                this.gameEnd = false;
+                return;
+            }
+            if (this.robot.y <= (this.blockConfig[this.blockConfig.length - 1][0].y - 950) && this.game_again) {
+                //游戏结束之后，机器人运动-250之后停止
+                GameHelper.GameInfo.moveSpeed = cc.v2(0, 0);
+                this.game_again = false;
+            }
         }
     }
 }
