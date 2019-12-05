@@ -107,10 +107,10 @@ export default class Camera extends cc.Component {
 
         });
         this.node.on(cc.Node.EventType.TOUCH_END, (ev) => {
-            GameHelper.GameInfo.moveSpeed = cc.v2(0, -640);
+            // GameHelper.GameInfo.moveSpeed = cc.v2(0, -640);
         });
         this.node.on(cc.Node.EventType.TOUCH_CANCEL, (ev) => {
-            GameHelper.GameInfo.moveSpeed = cc.v2(0, -640);
+            // GameHelper.GameInfo.moveSpeed = cc.v2(0, -640);
         });
     }
 
@@ -156,6 +156,11 @@ export default class Camera extends cc.Component {
      */
     @property(cc.Sprite)
     end_bg:cc.Sprite = null;
+    /**
+     * 到达地底
+     */
+    @property(cc.Node)
+    level_pass:cc.Node = null;
 
     lateUpdate() {
         if (this.robot.y > this.node.y && GameHelper.GameInfo.gameFlag) {
@@ -169,11 +174,12 @@ export default class Camera extends cc.Component {
             this.node.setPosition(0, this.robot.y);
             this.rightTop_str.node.position = cc.v2(250, this.robot.y + 400);
             this.scoreboard.node.setPosition(0, this.robot.y);
-            this.topTocontinue.node.setPosition(0,this.robot.y - 300);
+            this.topTocontinue.node.setPosition(0,this.robot.y - 350);
             this.progress.setPosition(0, this.robot.y + 400);
             this.condition.setPosition(200, this.robot.y + 400)
             this.endBtn.node.setPosition(0,this.robot.y);
             this.end_bg.node.setPosition(0,this.robot.y - 100);
+            this.level_pass.setPosition(0,this.robot.y + 200);
         }
         if (this.robot.y <= this.start_Lisence_PointY) {
             this.init();

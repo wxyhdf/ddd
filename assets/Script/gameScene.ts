@@ -169,6 +169,23 @@ export default class GameScene extends cc.Component {
    */
     @property(cc.Label)
     level_rightProgress: cc.Label = null;
+    /**
+     *  选择关卡的事件限制
+     */
+    timer_pass = 0;
+    /**
+    * 第四关血量减少
+     */
+    blood04 = 100;
+    /**
+     *  第四关计时
+     */
+    time04 = 15;
+    /**
+     * 关卡分数（包含秒数时）
+     */
+    @property(cc.Label)
+    condition_score:cc.Label = null;
 
     /**
      * 触发开始Game
@@ -184,11 +201,66 @@ export default class GameScene extends cc.Component {
             this.start_touch_one = true;
             switch (this.pass_label) {
                 case "Challenge 01":
-                    this.scheduleOnce(function () {
+                    setTimeout(() => {
                         this.condition.active = true;
-                    }.bind(this), 2)
+                    }, 1500);
                     break;
-
+                case "Challenge 02":
+                    setTimeout(() => {
+                        this.condition.active = true;
+                    }, 1500);
+                    break;
+                case "Challenge 03":
+                    setTimeout(() => {
+                        this.condition.active = true;
+                        let time = 45;
+                        this.condition_label.string = this.condition_str;
+                            this.schedule(function(){  
+                                time--;
+                                this.condition_label.string =  "00:" + time;
+                                if(time < 10){
+                                    this.condition_label.string =  "00:0" + time;
+                                }
+                            }.bind(this),1, 44,0);
+                    }, 1500);
+                    break;
+                    case "Challenge 04":
+                    GameHelper.GameInfo.blood = 100;
+                    setTimeout(() => {
+                        this.condition.active = true;
+                        this.condition_label.string = this.condition_str; 
+                            this.schedule(function(){  
+                                this.time04--;
+                                this.condition_label.string =  " 00:" + this.time04;
+                                if(this.time04 < 10){
+                                    this.condition_label.string = " 00:0" + this.time04;
+                                }
+                                if(this.time04 == 0){
+                                    this.robot.removeFromParent();
+                                    this.alertAccountsFunc(this.rightTop_diaStr, GameHelper.GameInfo.historyMaxScore);
+                                }
+                            }.bind(this),1, 14,0);
+                        }, 1500);
+                    break;
+                    case "Challenge 05":
+                            setTimeout(() => {
+                                this.condition.active = true;
+                                this.condition_score.string = "0/650";
+                                let time = 30;
+                                this.schedule(function(){  
+                                    time--;
+                                    this.condition_label.string =  "00:" + time;
+                                    if(time < 10){
+                                        this.condition_label.string =  "00:0" + time;
+                                    }
+                                    if(time == 0){
+                                        cc.log("sssssssssssssssssssssssss");
+                                        this.robot.removeFromParent();
+                                        this.alertAccountsFunc(this.block05, GameHelper.GameInfo.historyMaxScore);
+                                    }
+                                }.bind(this),1, 44,0);
+                            }, 1500);
+                        break;
                 case "":
                     this.scheduleOnce(function () {
                         this.right_topStr.active = true;
@@ -374,6 +446,14 @@ export default class GameScene extends cc.Component {
      * 关卡方块值
      */
     rightTop_diaStr = 0;
+    /**
+     * 存储碰撞时的血量
+     */
+    touch_blood = 0;
+  /**
+   * 第五关方块值
+   */
+    block05 = 0;
 
     init() {
         // 这个判断为再来一局打到能量为0时，初始化10能量
@@ -386,22 +466,36 @@ export default class GameScene extends cc.Component {
         //首先生成一次方块
         this.createBlock();
         this.node.on(GameHelper.NodeEvent.HitBlock, (ev: cc.Event.EventCustom) => {
+            
             let node = ev.getUserData()["target"] as cc.Node;
             this.robot.getChildByName("info").getChildByName("label").getComponent(cc.Label).string = GameHelper.GameInfo.blood.toString();
             GameHelper.GameInfo.blood--;
             let label = node.getChildByName("label");
             let blood = Number(label.getComponent(cc.Label).string) - 1;
+            if(this.pass_label == "Challenge 05"){
+                this.block05 += parseInt(label.getComponent(cc.Label).string);
+                this.condition_score.string = this.block05 + "/650";
+                //移除方块
+                this.blockArray.remove(node);
+                //回收节点
+                this.blockPool.onKilled(node);
+                return;
+            }
+            this.blood04 --;
             if (blood == 0) {
                 this.blockPool.onKilled(node);
             }
             label.getComponent(cc.Label).string = blood.toString();
             GameHelper.GameInfo.block_value++;
             this.rightTop_diaStr++;
+            //取历史最高分
             GameHelper.GameInfo.historyMaxScore = Math.max(this.rightTop_diaStr, GameHelper.GameInfo.historyMaxScore);
-
             this.right_topStr.getComponent(cc.Label).string = GameHelper.GameInfo.block_value.toString();
 
             if (GameHelper.GameInfo.blood == 0) { //机器人能量变为0时，弹出结束页面
+                if(this.rightTop_diaStr === 50){
+                    return;
+                }
                 this.robot.removeFromParent();
                 console.log("Game Over");
                 this.alertAccountsFunc(this.rightTop_diaStr, GameHelper.GameInfo.historyMaxScore);
@@ -417,6 +511,7 @@ export default class GameScene extends cc.Component {
         this.node.on(GameHelper.NodeEvent.AddBlood, (ev: cc.Event.EventCustom) => {
             let node = ev.getUserData()["target"] as cc.Node;
             let blood = Number(node.getChildByName("label").getComponent(cc.Label).string);
+            this.touch_blood += blood;
             //加血
             GameHelper.GameInfo.blood += blood;
             //回收节点
@@ -490,8 +585,19 @@ export default class GameScene extends cc.Component {
      * 是否可以预加载下一批方块和回收方块
      */
     isPreCreateBlock() {
+      
         //获取当前y轴指向的方块
-        let node = this.blockArray.firstOrDefault(item => item.y == this.blockCurrentPOSY);
+        let node = this.blockArray.firstOrDefault(item => parseInt(item.y.toString()) == parseInt(this.blockCurrentPOSY.toString()));
+        // let node = this.blockArray.find(item => {
+        //     console.log(item.y +"\t y")
+        //     console.log( this.blockCurrentPOSY +"\t posy")
+            
+        //     return item.y == this.blockCurrentPOSY;
+        // });
+        // console.log(this.blockCurrentPOSY);
+        // if(node){
+        //     console.log(node)
+        // }
         //判断当前y轴指向的方块是否可见 可见则生成下一波方块
         if (node && this.pointDirectionByVisible(node) == GameHelper.Direction.Visible) {
             this.createBlock();
@@ -601,21 +707,49 @@ export default class GameScene extends cc.Component {
             case "Challenge 01":
                 this.condition_label.string = this.rightTop_diaStr + this.condition_str;
                 if (this.rightTop_diaStr === 50) {
-                    this.robot.removeFromParent();
                     this.gameRunning = false;
                     setTimeout(() => {
+                        this.robot.removeFromParent();
                         cc.director.loadScene("Muen");
-                    }, 500)
+                    }, 1000)
 
                 }
                 break;
             case "Challenge 02":
+                this.condition_label.string = this.touch_blood + this.condition_str;
                 if (GameHelper.GameInfo.blood >= 40) {
-                    this.robot.removeFromParent();
                     this.gameRunning = false;
                     setTimeout(() => {
+                        this.robot.removeFromParent();
                         cc.director.loadScene("Muen");
-                    }, 500);
+                    }, 1000);
+                }
+                break;
+            case "Challenge 03":
+                    if(this.condition_label.string == "00:00"){
+                        this.gameRunning = false;
+                        setTimeout(() => {
+                            this.robot.removeFromParent();
+                            cc.director.loadScene("Muen");
+                        }, 1000);
+                    }
+                break;
+            case "Challenge 04":
+                if(this.blood04 == 0){
+                    setTimeout(() => {
+                        this.robot.removeFromParent();
+                        cc.director.loadScene("Muen");
+                        cc.log("第四关通关成功");
+                    }, 1000);
+                }
+                break;
+            case "Challenge 05":
+                if(this.block05 >= 650){
+                    setTimeout(() => {
+                        this.robot.removeFromParent();
+                        cc.director.loadScene("Muen");
+                        cc.log("第五关通关成功");
+                    }, 1000);
                 }
                 break;
 
@@ -648,6 +782,17 @@ export default class GameScene extends cc.Component {
      * 游戏是否再来一次，为了恢复原来的robot的移动
      */
     game_again = true;
+    /**
+     * 最后面的文字提示
+     */
+    @property(cc.Node)
+    level_pass:cc.Node = null;
+    /**
+     * 结束时显示当前通过关卡的数
+     */
+    @property(cc.Node)
+    level_passStr:cc.Label = null;
+
     lateUpdate() {
 
         if (!this.animationFlag && this.robot.y < this.draw_Start_PointY) {
@@ -671,17 +816,33 @@ export default class GameScene extends cc.Component {
                 this.robot.x = 0;
                 this.end_bg.node.active = true;
                 this.camera.getComponent("camera").flag = false;
-                this.scheduleOnce(function () {
-                    this.camera.getComponent(cc.Camera).zoomRatio = 1.5;
+                this.endBtn.node.active = true;
+
+                setTimeout(() => {
+                    
+                    this.camera.getComponent(cc.Camera).zoomRatio = 1.2;
+                    this.camera.y = this.camera.y - 100; //改变摄像机的位置
                     this.gold++;
+                    if(this.pass_label == ""){
+                        this.level_pass.active = true;
+                        this.level_passStr.getComponent(cc.Label).string = "Level " + GameHelper.GameInfo.level_right;
+                    }
                     GameHelper.GameInfo.level_left++;
                     GameHelper.GameInfo.level_right++;
-                    cc.log(this.gold);
+                    cc.log("this.gold:",this.gold);
+                    
                     this.robot.angle = 0
                     this.robot.getChildByName("info").active = false;
                     this.robot.getChildByName("2").getComponent(cc.Animation).stop();
-                    this.endBtn.node.active = true;
-                }.bind(this), 2);
+                    this.topTocontinue.node.active = true;
+                    var act1 = cc.fadeTo(1, 50);
+                    var act2 = cc.fadeTo(1, 255);
+                    var seq = cc.repeatForever(cc.sequence(act1, act2));
+                    this.topTocontinue.node.runAction(seq);
+                    this.gameEnd = false;
+                }, 1500);
+                    
+                
                 this.gameEnd = false;
                 return;
             }
