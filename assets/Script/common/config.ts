@@ -111,7 +111,7 @@ export default class Config {
         { pass: Config.pass_3, challenge: "Challenge 03", demand: "Not To Die \n00:45",condition:"00:45" },
         { pass: Config.pass_1, challenge: "Challenge 04", demand: "Bang And Die \n00:15",condition:"00:15" },
         { pass: Config.pass_3, challenge: "Challenge 05", demand: "Get 650 Points \n00;30 \n Invincible",condition:"00:30" },
-        { pass: Config.pass_1, challenge: "Challenge 06", demand: "" ,condition:"/50"},
+        { pass: Config.pass_3, challenge: "Challenge 06", demand: "" ,condition:"0m/100m"},
         { pass: Config.pass_1, challenge: "Challenge 07", demand: "" ,condition:"/50"},
         { pass: Config.pass_1, challenge: "Challenge 08", demand: "" ,condition:"/50"},
         { pass: Config.pass_1, challenge: "Challenge 09", demand: "" ,condition:"/50"},

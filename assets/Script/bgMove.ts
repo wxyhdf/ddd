@@ -27,28 +27,28 @@ export default class BgMove extends cc.Component {
 
 
     //背景移动
-    bgMoveFunction(bgList: cc.Node[], speed: number) {
-        if (this.init) {
-            this.gameScene.spawnMission(this.diamondsNode1);
-            this.init = false;
-        }
-        for (var i = 0; i < bgList.length; i++) {
-            bgList[i].y += speed;
-        }
-        if (bgList[0].y >= bgList[0].height) {
-            bgList[0].y = -960;
-            this.initBg.node.active = false;
-            this.gameScene.spawnMission(this.diamondsNode1);
+    // bgMoveFunction(bgList: cc.Node[], speed: number) {
+    //     if (this.init) {
+    //         this.gameScene.spawnMission(this.diamondsNode1);
+    //         this.init = false;
+    //     }
+    //     for (var i = 0; i < bgList.length; i++) {
+    //         bgList[i].y += speed;
+    //     }
+    //     if (bgList[0].y >= bgList[0].height) {
+    //         bgList[0].y = -960;
+    //         this.initBg.node.active = false;
+    //         this.gameScene.spawnMission(this.diamondsNode1);
 
-        }
-        if (bgList[1].y >= -940 + 2 * bgList[1].height) {
-            bgList[1].y = -940
+    //     }
+    //     if (bgList[1].y >= -940 + 2 * bgList[1].height) {
+    //         bgList[1].y = -940
 
-        }
-        if (bgList[1].y % 200 === 0) {
-            this.gameScene.spawnMission(this.diamondsNode2);
-        }
-    }
+    //     }
+    //     if (bgList[1].y % 200 === 0) {
+    //         this.gameScene.spawnMission(this.diamondsNode2);
+    //     }
+    // }
 
     onLoad() {}
 
@@ -65,8 +65,8 @@ export default class BgMove extends cc.Component {
 
     update(dt) {
 
-        if (this.mobileMaps) {
-            this.bgMoveFunction(this.bgSprite, this.roll_speed);
+        // if (this.mobileMaps) {
+        //     this.bgMoveFunction(this.bgSprite, this.roll_speed);
             // if(this.isCreateDiamind){    //  判断是否需要生成方块,可用于结束后关闭
             // if (this.recordMovebg_Y >= -1) {
             //     // this.gameScene.spawnMission();    //  生成方块
@@ -78,7 +78,7 @@ export default class BgMove extends cc.Component {
             //     this.gameScene.spawnNewStar()
             // }  
             // }
-        }
+        // }
 
     }
 }

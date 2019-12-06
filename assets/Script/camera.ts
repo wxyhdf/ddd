@@ -168,18 +168,18 @@ export default class Camera extends cc.Component {
             //this.node.setPosition(0, this.robot.y);
         }
         //if (this.flag) {
-     if (this.robot.y < this.node.y && this.flag) {
+     if (this.robot.y - 100 < this.node.y && this.flag) {
          
             let y=this.node.y;
-            this.node.setPosition(0, this.robot.y);
-            this.rightTop_str.node.position = cc.v2(250, this.robot.y + 400);
+            this.node.setPosition(0, this.robot.y - 100);
+            this.rightTop_str.node.position = cc.v2(250, this.robot.y + 300);
             this.scoreboard.node.setPosition(0, this.robot.y);
-            this.topTocontinue.node.setPosition(0,this.robot.y - 350);
-            this.progress.setPosition(0, this.robot.y + 400);
-            this.condition.setPosition(200, this.robot.y + 400)
+            this.topTocontinue.node.setPosition(0,this.robot.y - 250);
+            this.progress.setPosition(0, this.robot.y + 300);
+            this.condition.setPosition(200, this.robot.y + 300)
             this.endBtn.node.setPosition(0,this.robot.y);
-            this.end_bg.node.setPosition(0,this.robot.y - 100);
-            this.level_pass.setPosition(0,this.robot.y + 200);
+            this.end_bg.node.setPosition(0,this.robot.y );
+            this.level_pass.setPosition(0,this.robot.y + 100);
         }
         if (this.robot.y <= this.start_Lisence_PointY) {
             this.init();
