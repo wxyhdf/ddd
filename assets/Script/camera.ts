@@ -177,9 +177,9 @@ export default class Camera extends cc.Component {
             this.topTocontinue.node.setPosition(0,this.robot.y - 250);
             this.progress.setPosition(0, this.robot.y + 300);
             this.condition.setPosition(200, this.robot.y + 300)
-            this.endBtn.node.setPosition(0,this.robot.y);
-            this.end_bg.node.setPosition(0,this.robot.y );
-            this.level_pass.setPosition(0,this.robot.y + 100);
+            this.endBtn.node.setPosition(0,this.robot.y - 100);
+            this.end_bg.node.setPosition(0,this.robot.y  - 150);
+            this.level_pass.setPosition(0,this.robot.y + 250);
         }
         if (this.robot.y <= this.start_Lisence_PointY) {
             this.init();
