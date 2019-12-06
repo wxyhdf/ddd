@@ -1,0 +1,9 @@
+/library/
+/temp/
+tsconfig.json
+jsconfig.json
+/packages/
+/local/
+*.d.ts
+/settings/
+project.json
