@@ -6,6 +6,7 @@ const { ccclass, property } = cc._decorator;
 export default class Figure extends cc.Component {
 
     rigidbody: cc.RigidBody = null;
+    
     onLoad() {
         this.rigidbody = this.node.getComponent(cc.RigidBody);
     }
@@ -14,11 +15,21 @@ export default class Figure extends cc.Component {
         this.start_Run = true;
     }
 
+    isInvincible: boolean = false;  //  星星状态开关
+
+
     maxHitCount: number = 3;
     hitcount: number = 3;
     // 每次处理完碰撞体接触逻辑时被调用
     onPostSolve(contact, selfCollider, otherCollider) {
         if (otherCollider.node.name == "block") {
+            if (this.isInvincible) {
+                let event = new cc.Event.EventCustom(GameHelper.NodeEvent.HitBlock, true);
+                event.setUserData({ target: otherCollider.node });
+                this.node.dispatchEvent(event);
+
+            }
+            
             if (this.hitcount >= this.maxHitCount) {
                 this.hitcount = 0;
                 let worldManifold = contact.getWorldManifold();
@@ -42,6 +53,20 @@ export default class Figure extends cc.Component {
     onEndContact(contact, selfCollider, otherCollider) {
         this.hitcount = 3;
     }
+
+    /**
+     * 开启无敌模式
+     */
+    OpendInvincible() {  // 2019年12月4日
+        let self = this;
+        self.isInvincible = true;
+        GameHelper.GameInfo.moveSpeed = cc.v2(0, -600)
+        self.scheduleOnce(() => {
+            GameHelper.GameInfo.moveSpeed = cc.v2(0, -480);
+            self.isInvincible = false;
+        }, 5)
+    }
+
 
     update() {
 

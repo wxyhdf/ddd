@@ -47,6 +47,14 @@ export default class GameScene extends cc.Component {
      */
     @property(cc.Prefab)
     block: cc.Prefab = null;
+
+    /**
+    * 栏杆预制体
+    */
+    @property(cc.Prefab)
+    railing: cc.Prefab = null;
+
+
     /**
     * 方块生成之间的高度距离
     */
@@ -85,12 +93,12 @@ export default class GameScene extends cc.Component {
     /**
      * 结算的分数
      */
-    @property(cc.Label)
+    @property(cc.Node)
     score_str: cc.Label = null;
     /**
      * 历史最高分数
      */
-    @property(cc.Label)
+    @property(cc.Node)
     histroy_MaxScore: cc.Label = null;
     /**
      * 结束的闪烁文字
@@ -103,7 +111,7 @@ export default class GameScene extends cc.Component {
     @property(cc.Sprite)
     progressBlue: cc.Sprite = null;
     /**
-     * 初始化进度条的长度
+     * 初始化进度条的长度gg
      */
     @property(cc.Sprite)
     progressInit: cc.Sprite = null;
@@ -153,11 +161,7 @@ export default class GameScene extends cc.Component {
      */
     @property(cc.Label)
     level: cc.Label = null;
-    /**
-     * 栏杆
-     */
-    @property(cc.Prefab)
-    railing: cc.Prefab = null;
+
 
     start_touch_one: boolean = false;
     /**
@@ -186,7 +190,7 @@ export default class GameScene extends cc.Component {
      * 关卡分数（包含秒数时）
      */
     @property(cc.Label)
-    condition_score:cc.Label = null;
+    condition_score: cc.Label = null;
     /**
      * 通关的条件：06
      */
@@ -196,6 +200,13 @@ export default class GameScene extends cc.Component {
      */
     pass08_condition = 0;
     /**
+     * 场景显示里面的历史最高分
+     */
+    @property(cc.Node)
+    crown_histroyMaxScore: cc.Label = null;
+   
+
+    /**
      * 触发开始Game
      */
     OnGameStart(e) {
@@ -203,7 +214,7 @@ export default class GameScene extends cc.Component {
         if (!this.start_touch_one && GameHelper.GameInfo.gameFlag) {
 
             this.init();
-
+            this.touch_startGame = true;
             this.topstartStr.node.active = false;
             this.select.active = false;
             this.start_touch_one = true;
@@ -226,82 +237,82 @@ export default class GameScene extends cc.Component {
                         this.condition_score.node.active = false;
                         let time = 45;
                         this.condition_label.string = this.condition_str;
-                            this.schedule(function(){  
-                                time--;
-                                this.condition_label.string =  "00:" + time;
-                                if(time < 10){
-                                    this.condition_label.string =  "00:0" + time;
-                                }
-                            }.bind(this),1, 44,0);
+                        this.schedule(function () {
+                            time--;
+                            this.condition_label.string = "00:" + time;
+                            if (time < 10) {
+                                this.condition_label.string = "00:0" + time;
+                            }
+                        }.bind(this), 1, 44, 0);
                     }, 1500);
                     break;
-                    case "Challenge 04": //15获得100分数点
+                case "Challenge 04": //15获得100分数点
                     GameHelper.GameInfo.blood = 100;
                     setTimeout(() => {
                         this.condition.active = true;
-                        this.condition_label.string = this.condition_str; 
+                        this.condition_label.string = this.condition_str;
                         this.condition_score.string = "0/100";
-                            this.schedule(function(){  
-                                this.time04--;
-                                this.condition_label.string =  " 00:" + this.time04;
-                                if(this.time04 < 10){
-                                    this.condition_label.string = " 00:0" + this.time04;
-                                }
-                                if(this.time04 == 0){
-                                    this.endAlertFunc(this.rightTop_diaStr);
-                                }
-                            }.bind(this),1, 14,0);
-                        }, 1500);
+                        this.schedule(function () {
+                            this.time04--;
+                            this.condition_label.string = " 00:" + this.time04;
+                            if (this.time04 < 10) {
+                                this.condition_label.string = " 00:0" + this.time04;
+                            }
+                            if (this.time04 == 0) {
+                                this.endAlertFunc(this.rightTop_diaStr);
+                            }
+                        }.bind(this), 1, 14, 0);
+                    }, 1500);
                     break;
-                    case "Challenge 05":  //30,秒获得650分数点
-                            setTimeout(() => {
-                                this.condition.active = true;
-                                this.condition_score.string = "0/650";
-                                let time = 30;
-                                this.schedule(function(){  
-                                    time--;
-                                    this.condition_label.string =  "00:" + time;
-                                    if(time < 10){
-                                        this.condition_label.string =  "00:0" + time;
-                                    }
-                                    if(time == 0){
-                                        this.endAlertFunc(this.block05);
-                                    }
-                                }.bind(this),1, 29,0);
-                            }, 1500);
-                        break;
-                        case "Challenge 06": //走完100m
-                            setTimeout(() => {
-                                this.condition.active = true;
-                                this.condition_score.node.active = false;
-                                this.condition_label.string = "0m/100m";
-                            }, 1500);
-                            break;
-                        case "Challenge 07":
-                            break;
-                        case "Challenge 08": // 15秒内走完50米
-                            setTimeout(() => {
-                                this.condition.active = true;
-                                this.condition_label.string = "00:15";
-                                this.condition_score.string = "50m"
-                                let time08 = 15;
-                                this.schedule(function(){
-                                    time08--;
-                                    this.condition_label.string = "00:" + time08;
-                                    if(time08 < 10){
-                                        this.condition_label.string = "00:0" + time08;
-                                    }
-                                    if(time08 == 0){
-                                        this.endAlertFunc(this.rightTop_diaStr);
-                                    }
-                                }.bind(this),1, 14, 0);
-                            }, 1500);
-                            break;
-                        case "Challenge 09":
-                                this.condition.active = true;
-                                this.condition_score.node.active = false;
-                                this.condition_label.string = "0/100";
-                            break;
+                case "Challenge 05":  //30,秒获得650分数点
+                    setTimeout(() => {
+                        this.condition.active = true;
+                        this.condition_score.string = "0/650";
+                        let time = 30;
+                        this.schedule(function () {
+                            time--;
+                            this.condition_label.string = "00:" + time;
+                            if (time < 10) {
+                                this.condition_label.string = "00:0" + time;
+                            }
+                            if (time == 0) {
+                                this.endAlertFunc(this.block05);
+                            }
+                        }.bind(this), 1, 29, 0);
+                    }, 1500);
+                    break;
+                case "Challenge 06": //走完100m
+                    setTimeout(() => {
+                        this.condition.active = true;
+                        this.condition_score.node.active = false;
+                        this.condition_label.string = "0m/100m";
+                    }, 1500);
+                    break;
+                case "Challenge 07":
+                    break;
+                case "Challenge 08": // 15秒内走完50米
+                    setTimeout(() => {
+                        this.condition.active = true;
+                        this.condition_label.string = "00:15";
+                        this.condition_score.string = "50m"
+                        let time08 = 15;
+                        this.schedule(function () {
+                            time08--;
+                            this.condition_label.string = "00:" + time08;
+                            if (time08 < 10) {
+                                this.condition_label.string = "00:0" + time08;
+                            }
+                            if (time08 == 0) {
+                                this.endAlertFunc(this.rightTop_diaStr);
+                            }
+                        }.bind(this), 1, 14, 0);
+                    }, 1500);
+                    break;
+                case "Challenge 09":
+                    this.condition.active = true;
+                    this.condition_score.node.active = false;
+                    this.condition_label.string = "0/100";
+                    break;
                 case "":
                     this.scheduleOnce(function () {
                         this.right_topStr.active = true;
@@ -329,7 +340,7 @@ export default class GameScene extends cc.Component {
     /**
      * 结算时候的弹窗函数
      */
-    endAlertFunc(score){
+    endAlertFunc(score) {
         this.robot.removeFromParent();
         this.alertAccountsFunc(score, GameHelper.GameInfo.historyMaxScore);
     }
@@ -353,6 +364,18 @@ export default class GameScene extends cc.Component {
      * 当前存在的方块  用于回收方块
      */
     blockArray: Units.List<cc.Node> = new Units.List<cc.Node>();
+
+
+
+    /**
+        * 栏杆节点池 2019年12月3日
+        */
+    railingPool: AssetLoader.FactoryPool = new AssetLoader.FactoryPool();
+    /**
+     * 当前存在的栏杆   2019年12月3日
+     */
+    railingArray: Units.List<cc.Node> = new Units.List<cc.Node>();
+
     /**
      * 第一块方块生成的y轴坐标
      */
@@ -444,19 +467,20 @@ export default class GameScene extends cc.Component {
         }
     }
 
-
     /**
-     * 生成方块
-     */
-    createBlock(): boolean {
+         * 生成方块 /   栏杆
+         */
+    async createBlock() {
         let visi = cc.view.getVisibleSize();
         let width = visi.width / 5;
+        let isStar = Math.floor(Math.random() * 10)
         if (this.blockCurrentId == this.blockConfig.length) return false;
         let blockCoordinate = this.blockConfig[this.blockCurrentId];
         for (const item of blockCoordinate) {
             //更新方块所指向y轴坐标
             this.blockCurrentPOSY = this.blockNode.convertToNodeSpaceAR(item).y;
-            this.blockPool.acyncCreate<cc.Prefab>("prefab/block", cc.Prefab).then((node) => {
+            // cc.log('坐标' + this.blockNode.convertToNodeSpaceAR(item));
+            await this.blockPool.acyncCreate<cc.Prefab>("prefab/block", cc.Prefab).then((node) => {
                 node.width = width;
                 node.height = width;
                 let collider = node.getComponent(cc.PhysicsBoxCollider);
@@ -470,24 +494,84 @@ export default class GameScene extends cc.Component {
                 node.setPosition(this.blockNode.convertToNodeSpaceAR(item));
                 this.blockArray.add(node);
                 this.blockNode.addChild(node);
-                let sprite = node.getChildByName("sprite");
-                if (parseInt(label.getComponent(cc.Label).string) >= 10 && parseInt(label.getComponent(cc.Label).string) <= 18) {
-                    sprite.color = cc.color(228, 139, 69);
+                if (isStar > 4) {
+                    star.active = true;
                 }
-                else if (parseInt(label.getComponent(cc.Label).string) > 18) {
-                    sprite.color = cc.color(248, 95, 9);
+                if (parseInt(label.getComponent(cc.Label).string) > 10 && parseInt(label.getComponent(cc.Label).string) <= 20) {
+                    node.getChildByName("sprite").color = cc.color(228, 159, 120);
+                } else if (parseInt(label.getComponent(cc.Label).string) > 20 && parseInt(label.getComponent(cc.Label).string) <= 25) {
+                    node.getChildByName("sprite").color = cc.color(238, 115, 84);
+                } else if (parseInt(label.getComponent(cc.Label).string) > 25 && parseInt(label.getComponent(cc.Label).string) <= 30) {
+                    node.getChildByName("sprite").color = cc.color(240, 71, 29);
                 } else {
-                    sprite.color = cc.color(224, 230, 93);
+                    node.getChildByName("sprite").color = cc.color(230, 219, 205);
                 }
 
             })
+
+
+            let isRailing = Math.floor(Math.random() * 2)   //  2019年12月3日
+            // isRailing = 1
+            if (this.blockNode.convertToNodeSpaceAR(item).x < 200 && isRailing) {  //  生成栏杆
+                let raiType: number = 2 - Math.floor(Math.random() * 3 + 1)  //  类型 -1 0 1
+                let raiVarietye: number = Math.floor(Math.random() * 2) //  种类
+                // cc.log(raiVarietye);
+                let pos = this.blockNode.convertToNodeSpaceAR(item)
+                // raiType = -1
+                // raiVarietye = 1
+                if (raiType == 0) {
+                    let isReversals: number = 1;
+                    for (let i = 0; i < 2; i++) {
+                        this.railingPool.acyncCreate<cc.Prefab>("prefab/railing", cc.Prefab).then((node) => {   //  2019年12月3日
+
+                            node.getComponent("Railing").changeRailing(raiVarietye, raiType, isReversals)
+                            if (raiVarietye !== 0) {
+                                if (isReversals < 0) {
+                                    node.setPosition(pos.x + width / 2, (pos.y - width - width / 2) + 20) // 在方块下面生成长栏杆
+                                } else {
+                                    node.setPosition(pos.x + width / 2, (pos.y + width + width / 2 - 20) * isReversals) // 在方块上面生成长栏杆
+                                }
+                            } else {
+                                if (isReversals < 0) {
+                                    node.setPosition(pos.x + width / 2, (pos.y - width) + 10) // 在方块下面生成短栏杆
+                                } else {
+                                    node.setPosition(pos.x + width / 2, (pos.y + width - 10) * isReversals) // 在方块上面生成短栏杆
+                                }
+                            }
+                            isReversals = isReversals * -1
+                            this.railingArray.add(node)
+                            this.blockNode.addChild(node)
+                        })
+                    }
+                } else {
+                    this.railingPool.acyncCreate<cc.Prefab>("prefab/railing", cc.Prefab).then((node) => {   //  2019年12月3日
+
+                        node.getComponent("Railing").changeRailing(raiVarietye, raiType)
+                        if (raiVarietye !== 0) {
+                            if (raiType > 0) {
+                                node.setPosition(pos.x + width / 2, (pos.y - width - width / 2 + 20) * raiType)  //   在方块下面生成短栏杆
+                            } else {
+                                node.setPosition(pos.x + width / 2, (pos.y + width + width / 2 - 20)) //   在方块上面生成短栏杆
+                            }
+                        } else {
+                            if (raiType > 0) {
+                                node.setPosition(pos.x + width / 2, (pos.y - width + 10) * raiType)  //   在方块下面生成短栏杆
+                            } else {
+                                node.setPosition(pos.x + width / 2, (pos.y + width - 10)) //   在方块上面生成短栏杆
+                            }
+                        }
+                        this.railingArray.add(node)
+                        this.blockNode.addChild(node)
+                    })
+                }
+            }
         }
         this.createBlood();
         //最后一波不生成血量
         //if (this.blockCurrentId == this.blockConfig.length - 1) 
         //console.log(this.blockPool, this.bloodPool)
         this.blockCurrentId++;
-        return true;
+        //return true;
     }
 
     /**
@@ -498,9 +582,9 @@ export default class GameScene extends cc.Component {
      * 存储碰撞时的血量
      */
     touch_blood = 0;
-  /**
-   * 第五关方块值
-   */
+    /**
+     * 第五关方块值
+     */
     block05 = 0;
     /**
      * 第四关的方块值:随着能量减少的变换
@@ -511,23 +595,35 @@ export default class GameScene extends cc.Component {
      */
     block09 = 0;
 
-    init() {
+
+    async init() {
         // 这个判断为再来一局打到能量为0时，初始化10能量
         if (GameHelper.GameInfo.blood === 0) {
             GameHelper.GameInfo.blood = 10;
         }
         //使用第一关的关卡配置;
         this.createConfigCoordinate(GameHelper.GameInfo.pass);
+
         //首先生成一次方块
-        this.createBlock();
+        await this.createBlock();
+        this.blockArray.forEach(item => {
+            item.getChildByName("label").getComponent(cc.Label).string = (Math.round(Math.random()) + 1).toString();
+        });
+
         this.node.on(GameHelper.NodeEvent.HitBlock, (ev: cc.Event.EventCustom) => {
-            this.touch06 = false;
             let node = ev.getUserData()["target"] as cc.Node;
             this.robot.getChildByName("info").getChildByName("label").getComponent(cc.Label).string = GameHelper.GameInfo.blood.toString();
             GameHelper.GameInfo.blood--;
             let label = node.getChildByName("label");
+            let isInvincible = this.robot.getComponent("figure").isInvincible;
             let blood = Number(label.getComponent(cc.Label).string) - 1;
-            if(this.pass_label == "Challenge 05"){
+
+            if (isInvincible) {
+                this.blockPool.onKilled(node);
+                label.getComponent(cc.Label).string = blood.toString();
+                return;
+            }
+            if (this.pass_label == "Challenge 05") {
                 this.block05 += parseInt(label.getComponent(cc.Label).string);
                 this.condition_score.string = this.block05 + "/650";
                 //移除方块
@@ -538,9 +634,9 @@ export default class GameScene extends cc.Component {
                 GameHelper.GameInfo.historyMaxScore = Math.max(this.block05, GameHelper.GameInfo.historyMaxScore);
                 return;
             }
-            this.blood04 --;
-            this.blodAdd04 ++;
-            this.block09 ++;
+            this.blood04--;
+            this.blodAdd04++;
+            this.block09++;
             if (blood == 0) {
                 this.blockPool.onKilled(node);
             }
@@ -596,6 +692,8 @@ export default class GameScene extends cc.Component {
         this.topstartStrFunc();
         this.right_topStr.getComponent(cc.Label).string = GameHelper.GameInfo.block_value.toString();
         GameHelper.GameInfo.gameFlag = true;
+        this.level.string = GameHelper.GameInfo.level_left.toString();
+        this.crown_histroyMaxScore.string = Math.max(GameHelper.GameInfo.historyMaxScore, parseInt(this.crown_histroyMaxScore.string)).toString();
     }
     /**
     * 判断节点是否可见
@@ -636,7 +734,7 @@ export default class GameScene extends cc.Component {
      * 是否可以预加载下一批方块和回收方块
      */
     isPreCreateBlock() {
-      
+
         //获取当前y轴指向的方块
         let node = this.blockArray.firstOrDefault(item => parseInt(item.y.toString()) == parseInt(this.blockCurrentPOSY.toString()));
 
@@ -686,6 +784,7 @@ export default class GameScene extends cc.Component {
         var act2 = cc.fadeTo(1, 255);
         var seq = cc.repeatForever(cc.sequence(act1, act2));
         this.topTocontinue.node.runAction(seq);
+        GameHelper.GameInfo.block_value = 0; //用来表示当我这局不过关的时候，全局方块值变为0
     }
     /**
      * 重新加载场景，再来一局
@@ -721,7 +820,7 @@ export default class GameScene extends cc.Component {
         this.alert.active = false;
         this.pass_label = this.challenge.string;
         cc.log(this.pass_label);
-        this.level.string = this.challenge.string.substring(10, 12);
+
     }
     /**
      * 通关过程钟中标签的显示
@@ -741,10 +840,11 @@ export default class GameScene extends cc.Component {
             this.condition_str = data.condition;
         })
     }
+
     /**
      * 通关成功调用的函数
      */
-    passSuccessFunc(){
+    passSuccessFunc() {
         this.gameRunning = false;
         this.robot.removeFromParent();
         setTimeout(() => {
@@ -770,40 +870,40 @@ export default class GameScene extends cc.Component {
                 }
                 break;
             case "Challenge 03":
-                    if(this.condition_label.string == "00:00"){
-                        this.gameRunning = false;
-                        this.passSuccessFunc();
-                    }
+                if (this.condition_label.string == "00:00") {
+                    this.gameRunning = false;
+                    this.passSuccessFunc();
+                }
                 break;
             case "Challenge 04":
                 this.condition_score.string = this.blodAdd04.toString() + "/100";
-                if(this.blood04 == 0){
+                if (this.blood04 == 0) {
                     this.passSuccessFunc();
                 }
                 break;
             case "Challenge 05":
-                if(this.block05 >= 650){
+                if (this.block05 >= 650) {
                     this.passSuccessFunc();
                 }
                 break;
             case "Challenge 06":
-                if(this.condition_label.string == "100m/100m"){
+                if (this.condition_label.string == "100m/100m") {
                     this.passSuccessFunc();
                 }
                 break;
             case "Challenge 07":
                 break;
             case "Challenge 08":
-                    if(this.condition_score.string == "50m/50m"){
-                        this.passSuccessFunc();
-                    }
+                if (this.condition_score.string == "50m/50m") {
+                    this.passSuccessFunc();
+                }
                 break;
             case "Challenge 09":
-                    this.condition_label.string = this.block09 + "/100";
-                    if(this.condition_label.string == "100/100"){
-                        this.passSuccessFunc();
-                    }
-                    break;
+                this.condition_label.string = this.block09 + "/100";
+                if (this.condition_label.string == "100/100") {
+                    this.passSuccessFunc();
+                }
+                break;
 
             default:
                 break;
@@ -838,80 +938,83 @@ export default class GameScene extends cc.Component {
      * 最后面的文字提示
      */
     @property(cc.Node)
-    level_pass:cc.Node = null;
+    level_pass: cc.Node = null;
     /**
      * 结束时显示当前通过关卡的数
      */
     @property(cc.Node)
-    level_passStr:cc.Label = null;
+    level_passStr: cc.Label = null;
 
     /**
-     * 是否碰撞到物体：06
+     * 判断点击的时候生成数组
      */
-    touch06 = true;
+    touch_startGame = false;
     lateUpdate() {
+        if (this.touch_startGame) {
 
-        if (!this.animationFlag && this.robot.y < this.draw_Start_PointY) {
-            this.animationFlag = true;
-            this.robot.getChildByName("2").getComponent(cc.Animation).play();
-        }
-        if (this.robot.y < this.draw_Start_PointY) {
-            if(this.pass_label == "Challenge 06"){
-                this.pass06_condition = Math.floor(Math.abs(this.robot.y)/200);
-                //实时走的距离
-                this.condition_label.string = this.pass06_condition+"m/100m";
-            }else if(this.pass_label == "Challenge 08"){
-                this.pass08_condition = Math.floor(Math.abs(this.robot.y)/200);
-                //实时走的距离
-                this.condition_score.string = this.pass08_condition+"m/50m";
+
+            if (!this.animationFlag && this.robot.y < this.draw_Start_PointY) {
+                this.animationFlag = true;
+                this.robot.getChildByName("2").getComponent(cc.Animation).play();
             }
-            this.draw.lineTo(this.robot.x, this.robot.y);
-            this.draw.lineCap = cc.Graphics.LineCap.ROUND;
-            this.draw.lineWidth = this.robot.width - 10;
-            this.draw.strokeColor = cc.color(28, 8, 8);
-            this.draw.stroke();
-            this.draw.close();
-            this.draw.moveTo(this.robot.x, this.robot.y);
-            //进度条过程
-            this.progressBlue.node.width = Math.abs(this.robot.y) / Math.abs(this.blockConfig[this.blockConfig.length - 1][0].y - 600) * this.progressInit.node.width;
-            if (this.robot.y <= (this.blockConfig[this.blockConfig.length - 1][0].y - 600) && this.gameEnd) {
-                //小于方块的最后一组的Y坐标并且游戏结束
-                this.progressEnd.node.color = cc.color(65, 158, 219);
-                this.robot.y = this.blockConfig[this.blockConfig.length - 1][0].y - 300;
-                this.robot.x = 0;
-                this.end_bg.node.active = true;
-                this.camera.getComponent("camera").flag = false;
-                GameHelper.GameInfo.gameFlag = false;
-                this.endBtn.node.active = true;
-                setTimeout(() => {
-                    
-                    this.camera.getComponent(cc.Camera).zoomRatio = 1.2;
-                    this.camera.y = this.camera.y - 50; //改变摄像机的位置
-                    this.gold++;
-                    if(this.pass_label == ""){
-                        this.level_pass.active = true;
-                        this.level_passStr.getComponent(cc.Label).string = "Level " + GameHelper.GameInfo.level_right;
-                    }
-                    GameHelper.GameInfo.level_left++;
-                    GameHelper.GameInfo.level_right++;
-                    
-                    this.robot.angle = 0
-                    this.robot.getChildByName("info").active = false;
-                    this.robot.getChildByName("2").getComponent(cc.Animation).stop();
-                    this.topTocontinue.node.active = true;
-                    var act1 = cc.fadeTo(1, 50);
-                    var act2 = cc.fadeTo(1, 255);
-                    var seq = cc.repeatForever(cc.sequence(act1, act2));
-                    this.topTocontinue.node.runAction(seq);
+            if (this.robot.y < this.draw_Start_PointY) {
+                if (this.pass_label == "Challenge 06") {
+                    this.pass06_condition = Math.floor(Math.abs(this.robot.y) / 200);
+                    //实时走的距离
+                    this.condition_label.string = this.pass06_condition + "m/100m";
+                } else if (this.pass_label == "Challenge 08") {
+                    this.pass08_condition = Math.floor(Math.abs(this.robot.y) / 200);
+                    //实时走的距离
+                    this.condition_score.string = this.pass08_condition + "m/50m";
+                }
+                this.draw.lineTo(this.robot.x, this.robot.y);
+                this.draw.lineCap = cc.Graphics.LineCap.ROUND;
+                this.draw.lineWidth = this.robot.width - 10;
+                this.draw.strokeColor = cc.color(28, 8, 8);
+                this.draw.stroke();
+                this.draw.close();
+                this.draw.moveTo(this.robot.x, this.robot.y);
+                //进度条过程
+                this.progressBlue.node.width = Math.abs(this.robot.y) / Math.abs(this.blockConfig[this.blockConfig.length - 1][0].y - 600) * this.progressInit.node.width;
+                if (this.robot.y <= (this.blockConfig[this.blockConfig.length - 1][0].y - 600) && this.gameEnd) {
+                    //小于方块的最后一组的Y坐标并且游戏结束
+                    this.progressEnd.node.color = cc.color(65, 158, 219);
+                    this.robot.y = this.blockConfig[this.blockConfig.length - 1][0].y - 600;
+                    this.robot.x = 0;
+                    this.end_bg.node.active = true;
+                    this.camera.getComponent("camera").flag = false;
+                    GameHelper.GameInfo.gameFlag = false;
+                    this.endBtn.node.active = true;
+                    setTimeout(() => {
+
+                        this.camera.getComponent(cc.Camera).zoomRatio = 1.2;
+                        this.camera.y = this.camera.y - 50; //改变摄像机的位置
+                        this.gold++;
+                        if (this.pass_label == "") {
+                            this.level_pass.active = true;
+                            this.level_passStr.getComponent(cc.Label).string = "Level " + GameHelper.GameInfo.level_right;
+                        }
+                        GameHelper.GameInfo.level_left++;
+                        GameHelper.GameInfo.level_right++;
+
+                        this.robot.angle = 0
+                        this.robot.getChildByName("info").active = false;
+                        this.robot.getChildByName("2").getComponent(cc.Animation).stop();
+                        this.topTocontinue.node.active = true;
+                        var act1 = cc.fadeTo(1, 50);
+                        var act2 = cc.fadeTo(1, 255);
+                        var seq = cc.repeatForever(cc.sequence(act1, act2));
+                        this.topTocontinue.node.runAction(seq);
+                        this.gameEnd = false;
+                    }, 1500);
                     this.gameEnd = false;
-                }, 1500);
-                this.gameEnd = false;
-                return;
-            }
-            if (this.robot.y <= (this.blockConfig[this.blockConfig.length - 1][0].y - 950) && this.game_again) {
-                //游戏结束之后，机器人运动-250之后停止
-                GameHelper.GameInfo.moveSpeed = cc.v2(0, 0);
-                this.game_again = false;
+                    return;
+                }
+                if (this.robot.y <= (this.blockConfig[this.blockConfig.length - 1][0].y - 950) && this.game_again) {
+                    //游戏结束之后，机器人运动-250之后停止
+                    GameHelper.GameInfo.moveSpeed = cc.v2(0, 0);
+                    this.game_again = false;
+                }
             }
         }
     }

@@ -51,7 +51,7 @@ export namespace GameHelper {
 
         static moveSpeed: cc.Vec2 = cc.v2(0, -480);
 
-        static pass = Config.pass_1;
+        static pass = Config.radomGenBlock();
 
         static gameFlag:boolean=true;
         /**
