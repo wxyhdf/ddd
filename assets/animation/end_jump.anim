@@ -1,0 +1,201 @@
+{
+  "__type__": "cc.AnimationClip",
+  "_name": "end_jump",
+  "_objFlags": 0,
+  "_native": "",
+  "_duration": 2.75,
+  "sample": 60,
+  "speed": 1,
+  "wrapMode": 0,
+  "curveData": {
+    "paths": {
+      "body/leftFoot": {
+        "props": {
+          "angle": [
+            {
+              "frame": 0,
+              "value": 90
+            },
+            {
+              "frame": 0.5,
+              "value": 45
+            },
+            {
+              "frame": 1,
+              "value": 90
+            }
+          ]
+        }
+      },
+      "body/rightFoot": {
+        "props": {
+          "angle": [
+            {
+              "frame": 0,
+              "value": 90
+            },
+            {
+              "frame": 0.5,
+              "value": 135
+            },
+            {
+              "frame": 1,
+              "value": 90
+            }
+          ]
+        }
+      },
+      "body/leftHand": {
+        "props": {
+          "active": [
+            {
+              "frame": 0,
+              "value": false
+            },
+            {
+              "frame": 1.8833333333333333,
+              "value": true
+            }
+          ],
+          "position": [
+            {
+              "frame": 0,
+              "value": [
+                0,
+                -40,
+                0
+              ]
+            },
+            {
+              "frame": 1.8833333333333333,
+              "value": [
+                0,
+                -40,
+                0
+              ]
+            },
+            {
+              "frame": 2.75,
+              "value": [
+                -50,
+                -80,
+                0
+              ]
+            }
+          ]
+        }
+      },
+      "body/rightHand": {
+        "props": {
+          "active": [
+            {
+              "frame": 0,
+              "value": false
+            },
+            {
+              "frame": 1.8833333333333333,
+              "value": false
+            },
+            {
+              "frame": 1.9,
+              "value": true
+            }
+          ],
+          "position": [
+            {
+              "frame": 0,
+              "value": [
+                0,
+                -40,
+                0
+              ]
+            },
+            {
+              "frame": 1.8833333333333333,
+              "value": [
+                0,
+                -40,
+                0
+              ]
+            },
+            {
+              "frame": 2.75,
+              "value": [
+                50,
+                -80,
+                0
+              ]
+            }
+          ]
+        }
+      },
+      "body": {
+        "props": {
+          "scale": [
+            {
+              "frame": 1,
+              "value": {
+                "__type__": "cc.Vec2",
+                "x": 0.20000000298023224,
+                "y": 0.20000000298023224
+              }
+            },
+            {
+              "frame": 1.5,
+              "value": {
+                "__type__": "cc.Vec2",
+                "x": 0.20000000298023224,
+                "y": 0.15000000596046448
+              }
+            },
+            {
+              "frame": 2,
+              "value": {
+                "__type__": "cc.Vec2",
+                "x": 0.20000000298023224,
+                "y": 0.20000000298023224
+              }
+            }
+          ],
+          "position": [
+            {
+              "frame": 1.75,
+              "value": [
+                0,
+                0,
+                0
+              ]
+            },
+            {
+              "frame": 2.283333333333333,
+              "value": [
+                0,
+                -150,
+                0
+              ]
+            },
+            {
+              "frame": 2.75,
+              "value": [
+                0,
+                -30,
+                0
+              ]
+            }
+          ],
+          "angle": [
+            {
+              "frame": 2,
+              "value": 0
+            },
+            {
+              "frame": 2.75,
+              "value": 540
+            }
+          ]
+        }
+      }
+    }
+  },
+  "events": []
+}

@@ -1,0 +1,324 @@
+{
+  "__type__": "cc.AnimationClip",
+  "_name": "death",
+  "_objFlags": 0,
+  "_native": "",
+  "_duration": 0.4666666666666667,
+  "sample": 60,
+  "speed": 1,
+  "wrapMode": 0,
+  "curveData": {
+    "paths": {
+      "body/all/cap": {
+        "props": {
+          "color": [
+            {
+              "frame": 0,
+              "value": {
+                "__type__": "cc.Color",
+                "r": 255,
+                "g": 255,
+                "b": 255,
+                "a": 255
+              }
+            },
+            {
+              "frame": 0.16666666666666666,
+              "value": {
+                "__type__": "cc.Color",
+                "r": 247,
+                "g": 191,
+                "b": 191,
+                "a": 255
+              }
+            }
+          ],
+          "eulerAngles": []
+        }
+      },
+      "body/all/center": {
+        "props": {
+          "color": [
+            {
+              "frame": 0,
+              "value": {
+                "__type__": "cc.Color",
+                "r": 255,
+                "g": 255,
+                "b": 255,
+                "a": 255
+              }
+            },
+            {
+              "frame": 0.16666666666666666,
+              "value": {
+                "__type__": "cc.Color",
+                "r": 247,
+                "g": 191,
+                "b": 191,
+                "a": 255
+              }
+            }
+          ]
+        }
+      },
+      "body/all/capFloor": {
+        "props": {
+          "color": [
+            {
+              "frame": 0,
+              "value": {
+                "__type__": "cc.Color",
+                "r": 255,
+                "g": 255,
+                "b": 255,
+                "a": 255
+              }
+            },
+            {
+              "frame": 0.16666666666666666,
+              "value": {
+                "__type__": "cc.Color",
+                "r": 247,
+                "g": 191,
+                "b": 191,
+                "a": 255
+              }
+            }
+          ]
+        }
+      },
+      "body/all/face": {
+        "props": {
+          "color": [
+            {
+              "frame": 0,
+              "value": {
+                "__type__": "cc.Color",
+                "r": 255,
+                "g": 255,
+                "b": 255,
+                "a": 255
+              }
+            },
+            {
+              "frame": 0.16666666666666666,
+              "value": {
+                "__type__": "cc.Color",
+                "r": 247,
+                "g": 191,
+                "b": 191,
+                "a": 255
+              }
+            }
+          ]
+        }
+      },
+      "body/leftFoot": {
+        "props": {
+          "color": [
+            {
+              "frame": 0,
+              "value": {
+                "__type__": "cc.Color",
+                "r": 255,
+                "g": 255,
+                "b": 255,
+                "a": 255
+              }
+            },
+            {
+              "frame": 0.16666666666666666,
+              "value": {
+                "__type__": "cc.Color",
+                "r": 247,
+                "g": 191,
+                "b": 191,
+                "a": 255
+              }
+            }
+          ],
+          "angle": [
+            {
+              "frame": 0,
+              "value": 90
+            },
+            {
+              "frame": 0.16666666666666666,
+              "value": 45
+            }
+          ]
+        }
+      },
+      "body/rightFoot": {
+        "props": {
+          "color": [
+            {
+              "frame": 0,
+              "value": {
+                "__type__": "cc.Color",
+                "r": 255,
+                "g": 255,
+                "b": 255,
+                "a": 255
+              }
+            },
+            {
+              "frame": 0.16666666666666666,
+              "value": {
+                "__type__": "cc.Color",
+                "r": 247,
+                "g": 191,
+                "b": 191,
+                "a": 255
+              }
+            }
+          ],
+          "angle": [
+            {
+              "frame": 0,
+              "value": 90
+            },
+            {
+              "frame": 0.16666666666666666,
+              "value": 135
+            }
+          ]
+        }
+      },
+      "body/leftHand": {
+        "props": {
+          "color": [
+            {
+              "frame": 0,
+              "value": {
+                "__type__": "cc.Color",
+                "r": 255,
+                "g": 255,
+                "b": 255,
+                "a": 255
+              }
+            },
+            {
+              "frame": 0.16666666666666666,
+              "value": {
+                "__type__": "cc.Color",
+                "r": 247,
+                "g": 191,
+                "b": 191,
+                "a": 255
+              }
+            }
+          ]
+        }
+      },
+      "body/rightHand": {
+        "props": {
+          "color": [
+            {
+              "frame": 0,
+              "value": {
+                "__type__": "cc.Color",
+                "r": 255,
+                "g": 255,
+                "b": 255,
+                "a": 255
+              }
+            },
+            {
+              "frame": 0.16666666666666666,
+              "value": {
+                "__type__": "cc.Color",
+                "r": 247,
+                "g": 191,
+                "b": 191,
+                "a": 255
+              }
+            }
+          ]
+        }
+      },
+      "body/yuan": {
+        "props": {
+          "active": [
+            {
+              "frame": 0.16666666666666666,
+              "value": true
+            }
+          ],
+          "color": [
+            {
+              "frame": 0.16666666666666666,
+              "value": {
+                "__type__": "cc.Color",
+                "r": 255,
+                "g": 255,
+                "b": 255,
+                "a": 255
+              }
+            },
+            {
+              "frame": 0.3333333333333333,
+              "value": {
+                "__type__": "cc.Color",
+                "r": 255,
+                "g": 255,
+                "b": 255,
+                "a": 255
+              }
+            },
+            {
+              "frame": 0.43333333333333335,
+              "value": {
+                "__type__": "cc.Color",
+                "r": 146,
+                "g": 69,
+                "b": 69,
+                "a": 255
+              }
+            },
+            {
+              "frame": 0.45,
+              "value": {
+                "__type__": "cc.Color",
+                "r": 255,
+                "g": 0,
+                "b": 0,
+                "a": 255
+              }
+            },
+            {
+              "frame": 0.4666666666666667,
+              "value": {
+                "__type__": "cc.Color",
+                "r": 8,
+                "g": 0,
+                "b": 0,
+                "a": 255
+              }
+            }
+          ],
+          "scale": [
+            {
+              "frame": 0.16666666666666666,
+              "value": {
+                "__type__": "cc.Vec2",
+                "x": 1,
+                "y": 1
+              }
+            },
+            {
+              "frame": 0.3333333333333333,
+              "value": {
+                "__type__": "cc.Vec2",
+                "x": 3,
+                "y": 3
+              }
+            }
+          ]
+        }
+      }
+    }
+  },
+  "events": []
+}
