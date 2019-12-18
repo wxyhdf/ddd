@@ -1,5 +1,5 @@
 import Config from "./config";
-
+import localAction from "./LocalAction";
 export namespace GameHelper {
     /**
      * 节点事件
@@ -29,9 +29,9 @@ export namespace GameHelper {
          * 加血事件
          */
         AddBlood = "AddBlood",
-          /**
-         * 更新关卡
-         */
+        /**
+       * 更新关卡
+       */
         UpdatePassInfo = "UpdatePassInfo",
     }
     /**
@@ -44,16 +44,17 @@ export namespace GameHelper {
     }
 
     export class GameInfo {
+
         /**
          * 初始化血量
          */
-        static blood: number = 10;
+        static blood: number = 100;
 
         static moveSpeed: cc.Vec2 = cc.v2(0, -480);
 
         static pass = Config.radomGenBlock();
 
-        static gameFlag:boolean=true;
+        static gameFlag: boolean = true;
         /**
          * 初始化最初的方块值：保全局
          */
@@ -70,5 +71,26 @@ export namespace GameHelper {
          * 历史最高
          */
         static historyMaxScore = 0;
+
+        /**
+         * 用来判断处于第7，15关时，方块值的改变
+         */
+        static isAutoNumber: boolean = false;
+
+
+        /**
+        * 是否开启挖洞线条绘画
+        */
+        static isOpenDig = false;
+
+        /**
+        * 是否关闭监听
+        */
+       static gameOver = false;
+
+
+
+       static opendResult = false;
+
     }
 }

@@ -1,4 +1,5 @@
 import { GameHelper } from "./common/gameHelper";
+import GameScene from "./gameScene";
 
 // Learn TypeScript:
 //  - [Chinese] https://docs.cocos.com/creator/manual/zh/scripting/typescript.html
@@ -79,15 +80,34 @@ export default class Camera extends cc.Component {
     condition: cc.Node = null;
 
 
+    /**
+    * 确认选关之后在开始场景显示Label
+    */
+    @property(cc.Label)
+    confirm_pass: cc.Label = null;
+
+
+    recond_robot_X: Number = 0;
+
+
+
+
+
     //屏幕点击起始点
     touch_Start_Point: cc.Vec2 = cc.v2(0, 0);
     robot_Pre_Point: cc.Vec2 = cc.v2(0, 0);
     init() {
         this.node.on(cc.Node.EventType.TOUCH_START, (ev) => {
+            if (GameHelper.GameInfo.gameOver) return;
+
             let pos = ev.getLocation() as cc.Vec2;
+            this.recond_robot_X = this.robot.x;
             this.touch_Start_Point = pos;
         });
         this.node.on(cc.Node.EventType.TOUCH_MOVE, (ev) => {
+
+            if (GameHelper.GameInfo.gameOver) return;
+
             let pos = ev.getLocation() as cc.Vec2;
             if (this.touch_Start_Point.x == pos.x) return;
 
@@ -99,16 +119,50 @@ export default class Camera extends cc.Component {
             let visi = cc.view.getVisibleSize();
             if (per >= visi.width / 2 - this.robot.width / 2) per = visi.width / 2 - this.robot.width / 2;
             if (per <= -visi.width / 2 + this.robot.width / 2) per = -visi.width / 2 + this.robot.width / 2;
+
+
+
+
             if (this.isVilidPosition(cc.v2(per, this.robot.y))) {
                 this.robot.setPosition(cc.v2(per, this.robot.y));
+                if (this.recond_robot_X !== this.robot.x) {
+                    if (this.recond_robot_X > this.robot.x) {
+                        // cc.log('向左移动')
+
+                        if (this.robot.angle === -205) { } else {
+                            cc.tween(this.robot)
+                                .to(0.05, { angle: -205 })//  旋转弧度
+                                .to(0.2, { angle: -180 })
+                                .start()
+                        }
+
+                    } else {
+                        // cc.log('向右移动')
+                        if (this.robot.angle === -155) { } else {
+                            cc.tween(this.robot)
+                                .to(0.05, { angle: -155 })//  旋转弧度
+                                .to(0.2, { angle: -180 })
+                                .start()
+                        }
+                    }
+                } else {
+                    cc.tween(this.robot)
+                        .to(0.2, { angle: -180 }).start()
+                }
+
             }
+            this.recond_robot_X = this.robot.x
             this.touch_Start_Point = pos;
 
         });
         this.node.on(cc.Node.EventType.TOUCH_END, (ev) => {
+            if (GameHelper.GameInfo.gameOver) return;
+
             // GameHelper.GameInfo.moveSpeed = cc.v2(0, -640);
         });
         this.node.on(cc.Node.EventType.TOUCH_CANCEL, (ev) => {
+            if (GameHelper.GameInfo.gameOver) return;
+
             // GameHelper.GameInfo.moveSpeed = cc.v2(0, -640);
         });
     }
@@ -139,10 +193,18 @@ export default class Camera extends cc.Component {
         }
         return true;
     }
-    start() {
 
+    camera: cc.Camera = null;
+    cameraScale: number = 1;
+    cameraPos: cc.Vec2 = cc.v2(0, -65);
+
+    start() {
+        this.camera = this.node.getComponent(cc.Camera);
         this.start_Lisence_PointY = this.robot.y - this.robot.height / 2;
         //this.init();
+
+        // this.camera.zoomRatio = this.cameraScale;
+        this.node.position = this.cameraPos;
     }
     /**
      * 相机移动flag
@@ -152,6 +214,7 @@ export default class Camera extends cc.Component {
      * 移动到最后的标识
      */
     move_end = true;
+
 
     /**
     * 最后结束的时候的背景图
@@ -164,50 +227,82 @@ export default class Camera extends cc.Component {
     @property(cc.Node)
     level_pass: cc.Node = null;
 
+
+
     lateUpdate() {
+
+
+
         if (this.robot.y > this.node.y && GameHelper.GameInfo.gameFlag) {
             this.flag = true;
-            //this.node.setPosition(0, this.robot.y);
         }
-        //if (this.flag) {
-        if (this.robot.y - 100 < this.node.y && this.flag) {
+        // if (this.flag) {
+        //     if (this.robot.y - 100 < this.node.y && this.flag) {
 
-            let y = this.node.y;
-            this.node.setPosition(0, this.robot.y - 100);
-            this.rightTop_str.node.position = cc.v2(260, this.robot.y + 300);
-            this.scoreboard.node.setPosition(0, this.robot.y);
-            this.topTocontinue.node.setPosition(0, this.robot.y - 250);
-            this.progress.setPosition(0, this.robot.y + 300);
-            this.condition.setPosition(200, this.robot.y + 300)
-            this.endBtn.node.setPosition(0, this.robot.y - 100);
-            this.end_bg.node.setPosition(0, this.robot.y - 150);
-            this.level_pass.setPosition(0, this.robot.y + 250);
-        }
+
+
+        if (!GameScene.instance.isDraw) return;
+
+        let y = this.node.y;
+        this.node.setPosition(0, this.robot.y + this.robot.height + 35);
+        this.rightTop_str.node.position = cc.v2(260, this.robot.y + 600);
+        /************2019-12-16************ */
+        this.scoreboard.node.setPosition(0, this.robot.y + 200);
+        this.topTocontinue.node.setPosition(0, this.robot.y - 150);
+        /*********************************** */
+        this.progress.setPosition(0, this.robot.y + 600);
+        this.condition.setPosition(200, this.robot.y + 600)
+        this.endBtn.node.setPosition(0, this.robot.y - 100);
+        // this.end_bg.node.setPosition(0, this.robot.y - 150);
+        // this.level_pass.setPosition(0, this.robot.y + 250);
+
         if (this.robot.y <= this.start_Lisence_PointY) {
             this.init();
         }
+
+        // }
+
     }
+
+
+
 
     /**
      * 相机上移
      */
     upCameraFunc() {
         this.pass_exitBtn.node.active = false;
+        this.camera.getComponent(cc.Camera).zoomRatio = 1;
+        cc.tween(this.node).to(1, { position: cc.v2(0, -50) }).call(() => { /**************2019-12-17******************** */
+            GameHelper.GameInfo.gameFlag = true;
+            this.pass_bg.node.active = false;
+            this.confirm_pass.node.active = true;
+            this.camera.getComponent(cc.Camera).zoomRatio = 2.9;
+        }).start();
+    }
+    upCameraFunExit() {
+        this.pass_exitBtn.node.active = false;
         this.muen.active = true;
-        cc.tween(this.node).to(1, { position: cc.v2(0, 0) }).call(() => {
+        cc.tween(this.node).to(1, { position: cc.v2(0, -50) }).call(() => { /**************2019-12-17******************** */
             GameHelper.GameInfo.gameFlag = true;
             this.pass_bg.node.active = false;
             this.select.active = true;
+            this.confirm_pass.node.active = false;
 
+            this.camera.getComponent(cc.Camera).zoomRatio = 2.9;
         }).start();
     }
+
+
     /**
     * 相机下移
     */
     downCameraFunc() {
+        // debugger
+        this.camera.getComponent(cc.Camera).zoomRatio = 1;
         GameHelper.GameInfo.gameFlag = false;
         this.muen.active = false;
-        cc.tween(this.node).to(1, { position: cc.v2(0, -500) }).call(() => {
+        cc.tween(this.node).to(1, { position: cc.v2(0, -400) }).call(() => {
             this.pass_exitBtn.node.active = true;
         }).start();
     }

@@ -29,6 +29,21 @@ export default class NewClass extends cc.Component {
 
     }
 
+    
+    init(){
+        let self = this;
+        let boxCollider = self.gt.getComponent(cc.PhysicsBoxCollider);
+        self.node.width = 15;
+        self.node.height = 210;
+        self.node.setPosition(0,0);
+        self.pic.width = 15;
+        self.pic.height = 210;
+        self.pic.setPosition(0,0);
+        boxCollider.size.height = 210;  //  设置碰撞框的高度
+        boxCollider.apply();
+    }
+    
+
     // update (dt) {}
     /**
         * 改变栏杆图片
@@ -39,16 +54,13 @@ export default class NewClass extends cc.Component {
        changeRailing(type: number, raiType: number, minus?: number) {  //  种类，生成类型，反转
 
         let self = this;
+        self.init();
         let boxCollider = self.gt.getComponent(cc.PhysicsBoxCollider);
         let sp = self.pic.getComponent(cc.Sprite);
         if (type === 1) {   //  显示长栏杆
-
+            
             let buildType = Math.floor(Math.random() * 3 + 1);  //  随机长栏杆种类
             cc.loader.loadRes("/long_0" + buildType, cc.SpriteFrame, function (err, SpriteFrame) { //  显示图片
-                if(err){
-                        cc.log('加载出错')
-                        
-                }
                 sp.spriteFrame = SpriteFrame;
             });
 
@@ -57,7 +69,7 @@ export default class NewClass extends cc.Component {
             if (raiType === 0) {
                 let short_arr = ["1", "3"];
                 let num = short_arr[Math.floor(Math.random() * short_arr.length)];
-                cc.loader.loadRes("/short_0" +num , cc.SpriteFrame, function (err, SpriteFrame) { //  显示图片
+                cc.loader.loadRes("/short_01" , cc.SpriteFrame, function (err, SpriteFrame) { //  显示图片
                     if (err) {
                         cc.log('加载出错')
                     } else {
@@ -66,31 +78,29 @@ export default class NewClass extends cc.Component {
 
                 });
 
-                
-                self.pic.width = 15;
-                self.pic.height = 105
                 self.node.height = 105
-                self.node.y = self.node.y + (52.5 * minus)
+                // self.pic.width = 15;
+                self.pic.height = 105
+                // self.node.y = self.node.y -  minus
                 // boxCollider.offset.y = -105 * minus;   //  控制碰撞框的偏移量
                 boxCollider.size.height = 105;  //  设置碰撞框的高度
             } else {
                 let short_arr = ["1", "3"];
                 let num = short_arr[Math.floor(Math.random() * short_arr.length)];
-                cc.loader.loadRes("/short_0" + num, cc.SpriteFrame, function (err, SpriteFrame) { //  显示图片
+                cc.loader.loadRes("/short_01", cc.SpriteFrame, function (err, SpriteFrame) { //  显示图片
                     sp.spriteFrame = SpriteFrame;
                 });
                 
-               
-                self.pic.width = 15;
+                // self.node.height = 105
+                // self.pic.width = 15;
                 self.pic.height = 105
-                self.node.height = 105
-                self.node.y = self.node.y - (52.5 * raiType)
+                // self.node.y = self.node.y - (52.5 * raiType)
                 // boxCollider.offset.y = 105 * raiType;
                 boxCollider.size.height = 105;
             }
 
         }
 
-        // boxCollider.apply();// 调用apply以后才会重新生成box2d的相关对象
+        boxCollider.apply();// 调用apply以后才会重新生成box2d的相关对象
     }
 }
